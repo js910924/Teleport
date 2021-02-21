@@ -11,15 +11,16 @@ namespace Teleport.Services
     public class PttService : IPttService
     {
         public static string PttUrl = "https://www.ptt.cc";
+        private readonly HttpClient _httpClient;
+
+        public PttService(IHttpClientFactory httpClientFactory)
+        {
+            _httpClient = httpClientFactory.CreateClient("Ptt");
+        }
 
         public async Task<string> CrawlPtt(string board)
         {
-            var httpClient = new HttpClient()
-            {
-                BaseAddress = new Uri(PttUrl)
-            };
-
-            var httpResponseMessage = await httpClient.GetAsync($"/bbs/{board}/index.html");
+            var httpResponseMessage = await _httpClient.GetAsync($"/bbs/{board}/index.html");
             var response = await httpResponseMessage.Content.ReadAsStringAsync();
 
             return response;

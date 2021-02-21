@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -22,8 +23,16 @@ namespace Teleport
         {
             services.AddControllersWithViews();
 
+            ConfigureHttpClient(services);
+
             services.AddTransient<ITelegramService, TelegramService>();
             services.AddTransient<IPttService, PttService>();
+        }
+
+        private static void ConfigureHttpClient(IServiceCollection services)
+        {
+            services.AddHttpClient("Ptt", c => { c.BaseAddress = new Uri("https://www.ptt.cc"); });
+            services.AddHttpClient("Telegram", c => { c.BaseAddress = new Uri("https://api.telegram.org"); });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
