@@ -23,6 +23,7 @@ namespace Teleport
             services.AddControllersWithViews();
 
             services.AddTransient<ITelegramService, TelegramService>();
+            services.AddTransient<IPttService, PttService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
