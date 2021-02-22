@@ -26,7 +26,7 @@ namespace Teleport.Services
 
         public IEnumerable<PttArticle> GetArticles(string html, string titleElement)
         {
-            var regex = new Regex($"<a href=(\".*\")>(.*{titleElement}.*)</a>");
+            var regex = new Regex($"<a href=\"(.*)\">(.*{titleElement}.*)</a>");
             var match = regex.Match(html);
             var articles = new List<PttArticle>();
 
@@ -57,8 +57,8 @@ namespace Teleport.Services
 
         private static PttArticle ToPttArticle(Match match)
         {
-            var title = match.Groups[2].ToString().Trim('"');
-            var link = match.Groups[1].ToString().Trim('"');
+            var title = match.Groups[2].ToString();
+            var link = match.Groups[1].ToString();
 
             return new PttArticle()
             {
