@@ -6,7 +6,8 @@ namespace Teleport.Services.Interfaces
 {
     public interface IPttService
     {
-        Task<string> CrawlPtt(string board);
+        Task<string> CrawlPtt(string pageLink);
         IEnumerable<PttArticle> GetArticles(string html, string titleElement);
+        string GetPreviousPage(string html);
     }
 }

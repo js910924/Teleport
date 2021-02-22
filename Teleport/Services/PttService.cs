@@ -18,12 +18,10 @@ namespace Teleport.Services
             _httpClient = httpClientFactory.CreateClient("Ptt");
         }
 
-        public async Task<string> CrawlPtt(string board)
+        public async Task<string> CrawlPtt(string pageLink)
         {
-            var httpResponseMessage = await _httpClient.GetAsync($"/bbs/{board}/index.html");
-            var response = await httpResponseMessage.Content.ReadAsStringAsync();
-
-            return response;
+            var httpResponseMessage = await _httpClient.GetAsync(pageLink);
+            return await httpResponseMessage.Content.ReadAsStringAsync();
         }
 
         public IEnumerable<PttArticle> GetArticles(string html, string titleElement)
@@ -42,6 +40,19 @@ namespace Teleport.Services
             }
 
             return articles;
+        }
+
+        public string GetPreviousPage(string html)
+        {
+            var regex = new Regex($"<a class=\"btn wide\" href=\"(.*)\">.*上頁</a>");
+            var match = regex.Match(html);
+
+            if (match.Success)
+            {
+                return match.Groups[1].Value;
+            }
+
+            throw new Exception($"Fail to get previous page, html = {html}");
         }
 
         private static PttArticle ToPttArticle(Match match)

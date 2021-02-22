@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Threading.Tasks;
 using Teleport.Services.Interfaces;
 
@@ -25,14 +26,21 @@ namespace Teleport.Controllers
 
         public async Task Index()
         {
-            await CrawlPtt("Stock", "標的");
+            await CrawlPtt("Stock", "標的", 1);
         }
 
-        public async Task CrawlPtt(string board, string titleElement)
+        public async Task CrawlPtt(string board, string titleElement, int pageAmount)
         {
-            var response = await _pttService.CrawlPtt(board);
+            var currentPageHtml = await _pttService.CrawlPtt($"/bbs/{board}/index.html");
+            var articles = _pttService.GetArticles(currentPageHtml, titleElement);
 
-            var articles = _pttService.GetArticles(response, titleElement);
+            for (var i = 1; i < pageAmount; i++)
+            {
+                var previousPageLink = _pttService.GetPreviousPage(currentPageHtml);
+                currentPageHtml = await _pttService.CrawlPtt(previousPageLink);
+
+                articles = articles.Concat(_pttService.GetArticles(currentPageHtml, titleElement));
+            }
 
             foreach (var article in articles)
             {
