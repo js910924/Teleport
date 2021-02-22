@@ -24,19 +24,36 @@ namespace Teleport.Services
             return await httpResponseMessage.Content.ReadAsStringAsync();
         }
 
-        public IEnumerable<PttArticle> GetArticles(string html, string titleElement)
+        public IEnumerable<PttArticle> GetArticles(string html)
         {
-            var regex = new Regex($"<a href=\"(.*)\">(.*{titleElement}.*)</a>");
-            var match = regex.Match(html);
+            var titleRegex = new Regex("<div class=\"title\">([\\s\\S]*?)</div>");
+            var authorRegex = new Regex("<div class=\"author\">(.*)</div>");
+            var dateRegex = new Regex("<div class=\"date\">(.*)</div>");
+
+            var titleMatch = titleRegex.Match(html);
+            var authorMatch = authorRegex.Match(html);
+            var dateMatch = dateRegex.Match(html);
+
             var articles = new List<PttArticle>();
 
-            while (match.Success)
+            while (titleMatch.Success)
             {
-                var article = ToPttArticle(match);
+                var titleDiv = titleMatch.Groups[1].Value;
+                var regex = new Regex("<a href=\"(.*)\">(.*)</a>");
+                var match = regex.Match(titleDiv);
+                var article = new PttArticle()
+                {
+                    Title = match.Groups[2].Value,
+                    Link = match.Groups[1].Value,
+                    Author = authorMatch.Groups[1].Value,
+                    Date = dateMatch.Groups[1].Value
+                };
 
                 articles.Add(article);
 
-                match = match.NextMatch();
+                titleMatch = titleMatch.NextMatch();
+                authorMatch = authorMatch.NextMatch();
+                dateMatch = dateMatch.NextMatch();
             }
 
             return articles;
@@ -53,18 +70,6 @@ namespace Teleport.Services
             }
 
             throw new Exception($"Fail to get previous page, html = {html}");
-        }
-
-        private static PttArticle ToPttArticle(Match match)
-        {
-            var title = match.Groups[2].ToString();
-            var link = match.Groups[1].ToString();
-
-            return new PttArticle()
-            {
-                Title = title,
-                Link = link
-            };
         }
     }
 }

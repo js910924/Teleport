@@ -32,17 +32,22 @@ namespace Teleport.Controllers
         public async Task CrawlPtt(string board, string titleElement, int pageAmount)
         {
             var currentPageHtml = await _pttService.CrawlPtt($"/bbs/{board}/index.html");
-            var articles = _pttService.GetArticles(currentPageHtml, titleElement);
+            var targetArticles =
+                _pttService.GetArticles(currentPageHtml)
+                    .Where(article => article.Title.Contains(titleElement));
 
             for (var i = 1; i < pageAmount; i++)
             {
                 var previousPageLink = _pttService.GetPreviousPage(currentPageHtml);
                 currentPageHtml = await _pttService.CrawlPtt(previousPageLink);
+                var articles =
+                    _pttService.GetArticles(currentPageHtml)
+                        .Where(article => article.Title.Contains(titleElement));
 
-                articles = articles.Concat(_pttService.GetArticles(currentPageHtml, titleElement));
+                targetArticles = targetArticles.Concat(articles);
             }
 
-            foreach (var article in articles)
+            foreach (var article in targetArticles)
             {
                 await _telegramService.SendMessage(article.ToPttLink());
             }
