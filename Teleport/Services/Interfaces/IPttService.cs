@@ -9,5 +9,6 @@ namespace Teleport.Services.Interfaces
         Task<string> CrawlPtt(string pageLink);
         string GetPreviousPage(string html);
         IEnumerable<PttArticle> GetArticles(string html);
+        async Task<IEnumerable<PttArticle>> CrawlTargetArticleLinks(string board, string titleElement, int pageAmount);
     }
 }

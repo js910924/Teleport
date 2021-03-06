@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
+using Teleport.Entities;
 using Teleport.Services.Interfaces;
 
 namespace Teleport.Controllers
@@ -31,21 +33,7 @@ namespace Teleport.Controllers
 
         public async Task CrawlPtt(string board, string titleElement, int pageAmount)
         {
-            var currentPageHtml = await _pttService.CrawlPtt($"/bbs/{board}/index.html");
-            var targetArticles =
-                _pttService.GetArticles(currentPageHtml)
-                    .Where(article => article.Title.Contains(titleElement));
-
-            for (var i = 1; i < pageAmount; i++)
-            {
-                var previousPageLink = _pttService.GetPreviousPage(currentPageHtml);
-                currentPageHtml = await _pttService.CrawlPtt(previousPageLink);
-                var articles =
-                    _pttService.GetArticles(currentPageHtml)
-                        .Where(article => article.Title.Contains(titleElement));
-
-                targetArticles = targetArticles.Concat(articles);
-            }
+            var targetArticles = await _pttService.CrawlTargetArticleLinks(board, titleElement, pageAmount);
 
             foreach (var article in targetArticles)
             {

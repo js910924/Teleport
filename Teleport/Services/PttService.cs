@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -70,6 +71,27 @@ namespace Teleport.Services
             }
 
             throw new Exception($"Fail to get previous page, html = {html}");
+        }
+
+        public async Task<IEnumerable<PttArticle>> CrawlTargetArticleLinks(string board, string titleElement, int pageAmount)
+        {
+            var currentPageHtml = await CrawlPtt($"/bbs/{board}/index.html");
+            var targetArticles =
+                GetArticles(currentPageHtml)
+                    .Where(article => article.Title.Contains(titleElement));
+
+            for (var i = 1; i < pageAmount; i++)
+            {
+                var previousPageLink = GetPreviousPage(currentPageHtml);
+                currentPageHtml = await CrawlPtt(previousPageLink);
+                var articles =
+                    GetArticles(currentPageHtml)
+                        .Where(article => article.Title.Contains(titleElement));
+
+                targetArticles = targetArticles.Concat(articles);
+            }
+
+            return targetArticles;
         }
     }
 }
