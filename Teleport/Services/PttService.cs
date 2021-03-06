@@ -19,13 +19,13 @@ namespace Teleport.Services
             _httpClient = httpClientFactory.CreateClient("Ptt");
         }
 
-        public async Task<string> CrawlPtt(string pageLink)
+        private async Task<string> CrawlPtt(string pageLink)
         {
             var httpResponseMessage = await _httpClient.GetAsync(pageLink);
             return await httpResponseMessage.Content.ReadAsStringAsync();
         }
 
-        public IEnumerable<PttArticle> GetArticles(string html)
+        private static IEnumerable<PttArticle> GetArticles(string html)
         {
             var titleRegex = new Regex("<div class=\"title\">([\\s\\S]*?)</div>");
             var authorRegex = new Regex("<div class=\"author\">(.*)</div>");
@@ -60,7 +60,7 @@ namespace Teleport.Services
             return articles;
         }
 
-        public string GetPreviousPage(string html)
+        private static string GetPreviousPage(string html)
         {
             var regex = new Regex($"<a class=\"btn wide\" href=\"(.*)\">.*上頁</a>");
             var match = regex.Match(html);
