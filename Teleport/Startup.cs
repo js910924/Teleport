@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Quartz;
+using Quartz.Impl;
 using Teleport.Services;
 using Teleport.Services.Interfaces;
 
@@ -27,6 +29,40 @@ namespace Teleport
 
             services.AddTransient<ITelegramService, TelegramService>();
             services.AddTransient<IPttService, PttService>();
+
+
+            ConfigureSchedulers(services);
+        }
+
+        private static void ConfigureSchedulers(IServiceCollection services)
+        {
+            services.AddTransient<FetchStockTickerJob>();
+
+            var container = services.BuildServiceProvider();
+
+            var jobFactory = new QuartzJobFactory(container);
+
+            // Create a Quartz.NET scheduler
+            var schedulerFactory = new StdSchedulerFactory();
+            var scheduler = schedulerFactory.GetScheduler().GetAwaiter().GetResult();
+
+            // Tell the scheduler to use the custom job factory
+            scheduler.JobFactory = jobFactory;
+
+            var job = JobBuilder.Create<FetchStockTickerJob>()
+                .WithIdentity("job1", "group1")
+                .Build();
+
+            var trigger = TriggerBuilder.Create()
+                .WithIdentity("trigger1", "group1")
+                .StartNow()
+                .WithSimpleSchedule(x => x
+                    .WithIntervalInSeconds(10)
+                    .RepeatForever())
+                .Build();
+
+            scheduler.ScheduleJob(job, trigger);
+            scheduler.Start().GetAwaiter().GetResult();
         }
 
         private static void ConfigureHttpClient(IServiceCollection services)

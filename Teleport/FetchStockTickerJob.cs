@@ -18,7 +18,7 @@ namespace Teleport
 
         public async Task Execute(IJobExecutionContext context)
         {
-            var articleLinks = await _pttService.CrawlTargetArticleLinks("Stock", "標的", 1);
+            var articleLinks = await _pttService.CrawlTargetArticleLinks("Stock", "標的", 3);
 
             var tasks = articleLinks
                 .Select(link => Task.Run(() => _telegramService.SendMessage(link.ToPttLink())));
