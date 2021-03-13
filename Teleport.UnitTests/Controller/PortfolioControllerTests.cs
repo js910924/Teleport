@@ -111,8 +111,7 @@ namespace Teleport.UnitTests.Controller
 
         private void GiveStockInfo(string stockSymbol, decimal price, decimal percentageOfChange, decimal change)
         {
-            _stockProxy.GetStockInfo(stockSymbol).Returns(
-                new StockInfo() {Symbol = stockSymbol, Price = price, PercentageOfChange = percentageOfChange, Change = change});
+              _stockProxy.GetStockInfo(stockSymbol).Returns(new StockInfo() {Symbol = stockSymbol, Price = price, PercentageOfChange = percentageOfChange, Change = change});
         }
     }
 }

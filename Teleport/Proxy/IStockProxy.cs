@@ -1,4 +1,5 @@
-﻿using Teleport.Models;
+﻿using System.Threading.Tasks;
+using Teleport.Models;
 
 namespace Teleport.Proxy
 {
