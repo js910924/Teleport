@@ -7,11 +7,6 @@ using Teleport.Proxy;
 
 namespace Teleport.Services
 {
-    public interface IStockService
-    {
-        IEnumerable<StockPosition> GetAllStockPositions(IEnumerable<StockTransaction> stockTransactions);
-    }
-
     public class StockService : IStockService
     {
         private readonly IStockProxy _stockProxy;
