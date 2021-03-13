@@ -1,6 +1,7 @@
 using System;
 using System.Net.Http;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Teleport.Models;
 
 namespace Teleport.Proxy
@@ -15,9 +16,9 @@ namespace Teleport.Proxy
             _httpClient.BaseAddress = new Uri("https://finance.yahoo.com/quote/");
         }
 
-        public StockInfo GetStockInfo(string stockSymbol)
+        public async Task<StockInfo> GetStockInfo(string stockSymbol)
         {
-            var response = _httpClient.GetStringAsync(stockSymbol).GetAwaiter().GetResult();
+            var response = await _httpClient.GetStringAsync(stockSymbol);
             var regex = new Regex(@"<span class=""Trsdu\(0\.3s\) Fw\(b\) Fz\(36px\) Mb\(-4px\) D\(ib\)"" data-reactid=""32"">([0-9]*.[0-9]*)<\/span>");
             var match = regex.Match(response);
             decimal.TryParse(match.Groups[1].Value, out var price);

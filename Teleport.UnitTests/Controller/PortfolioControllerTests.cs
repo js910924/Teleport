@@ -42,7 +42,7 @@ namespace Teleport.UnitTests.Controller
 
             var viewResult = await _controller.Position();
 
-            ((IEnumerable<StockPosition>)viewResult.Model).Should().BeEquivalentTo(new List<StockPosition>()
+            viewResult.Model.Should().BeEquivalentTo(new List<StockPosition>()
             {
                 new StockPosition()
                 {
@@ -76,7 +76,7 @@ namespace Teleport.UnitTests.Controller
 
             var viewResult = await _controller.Position();
 
-            ((IEnumerable<StockPosition>)viewResult.Model).Should().BeEquivalentTo(new List<StockPosition>()
+            viewResult.Model.Should().BeEquivalentTo(new List<StockPosition>()
             {
                 new StockPosition()
                 {
@@ -109,7 +109,8 @@ namespace Teleport.UnitTests.Controller
 
         private void GiveStockInfo(string stockSymbol, decimal price, decimal percentageOfChange, decimal change)
         {
-              _stockProxy.GetStockInfo(stockSymbol).Returns(new StockInfo() {Symbol = stockSymbol, Price = price, PercentageOfChange = percentageOfChange, Change = change});
+              _stockProxy.GetStockInfo(stockSymbol).Returns(
+                  Task.FromResult(new StockInfo() {Symbol = stockSymbol, Price = price, PercentageOfChange = percentageOfChange, Change = change}));
         }
     }
 }

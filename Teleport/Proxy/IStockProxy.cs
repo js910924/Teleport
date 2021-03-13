@@ -1,9 +1,10 @@
-﻿using Teleport.Models;
+﻿using System.Threading.Tasks;
+using Teleport.Models;
 
 namespace Teleport.Proxy
 {
     public interface IStockProxy
     {
-        StockInfo GetStockInfo(string stockSymbol);
+        Task<StockInfo> GetStockInfo(string stockSymbol);
     }
 }
