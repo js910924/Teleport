@@ -8,6 +8,8 @@ namespace Teleport.Proxy
 {
     public class StockProxy : IStockProxy
     {
+        private const string YahooFinancePricePattern = @"<span class=""Trsdu\(0\.3s\) Fw\(b\) Fz\(36px\) Mb\(-4px\) D\(ib\)"" data-reactid=""32"">([0-9]*.[0-9]*)<\/span>";
+        private const string YahooFinanceDailyChangePattern = @"<span class=""Trsdu\(0\.3s\) Fw\(500\) Pstart\(10px\) Fz\(24px\) C\(.*\)"" data-reactid=""33"">(.*) \((.*)%\)<\/span>";
         private readonly HttpClient _httpClient;
 
         public StockProxy(IHttpClientFactory httpClientFactory)
@@ -18,24 +20,32 @@ namespace Teleport.Proxy
 
         public async Task<StockInfo> GetStockInfo(string stockSymbol)
         {
-            var response = await _httpClient.GetStringAsync(stockSymbol);
-            var regex = new Regex(@"<span class=""Trsdu\(0\.3s\) Fw\(b\) Fz\(36px\) Mb\(-4px\) D\(ib\)"" data-reactid=""32"">([0-9]*.[0-9]*)<\/span>");
-            var match = regex.Match(response);
-            decimal.TryParse(match.Groups[1].Value, out var price);
+            var html = await _httpClient.GetStringAsync(stockSymbol);
 
-            var regex1 = new Regex(@"<span class=""Trsdu\(0\.3s\) Fw\(500\) Pstart\(10px\) Fz\(24px\) C\(.*\)"" data-reactid=""33"">(.*) \((.*)%\)<\/span>");
-            var match1 = regex1.Match(response);
-            decimal.TryParse(match1.Groups[1].Value, out var percentageOfChange);
-            decimal.TryParse(match1.Groups[2].Value, out var change);
+            var priceRegex = new Regex(YahooFinancePricePattern);
+            var dailyChangeRegex = new Regex(YahooFinanceDailyChangePattern);
+            var priceMatch = priceRegex.Match(html);
+            var dailyChangeMatch = dailyChangeRegex.Match(html);
 
-            var stockInfo = new StockInfo
+            if (priceMatch.Success && dailyChangeMatch.Success)
             {
-                Symbol = stockSymbol,
-                Price = price,
-                PercentageOfChange = percentageOfChange / 100m,
-                Change = change
+                var price = Convert.ToDecimal(priceMatch.Groups[1].Value);
+                var percentageOfChange = Convert.ToDecimal(dailyChangeMatch.Groups[1].Value);
+                var change = Convert.ToDecimal(dailyChangeMatch.Groups[2].Value);
+
+                return new StockInfo
+                {
+                    Symbol = stockSymbol,
+                    Price = price,
+                    PercentageOfChange = percentageOfChange / 100m,
+                    Change = change
+                };
+            }
+
+            return new StockInfo()
+            {
+                Symbol = stockSymbol
             };
-            return stockInfo;
         }
     }
 }
