@@ -42,6 +42,7 @@ namespace Teleport.Controllers
             _stockService.DeleteAllTransactions();
         }
 
+        [HttpGet]
         public async Task<ViewResult> Position()
         {
             var stockPositions = await _stockService.GetAllStockPositions();
