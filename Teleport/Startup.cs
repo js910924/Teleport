@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Quartz;
 using Quartz.Impl;
+using Teleport.Repository;
 using Teleport.Services;
 using Teleport.Services.Interfaces;
 
@@ -30,7 +31,14 @@ namespace Teleport
             services.AddTransient<ITelegramService, TelegramService>();
             services.AddTransient<IPttService, PttService>();
 
+            ConfigureRepo(services);
+
             //ConfigureSchedulers(services);
+        }
+
+        private static void ConfigureRepo(IServiceCollection services)
+        {
+            services.AddTransient<IStockTransactionRepo, StockTransactionRepo>();
         }
 
         private static void ConfigureSchedulers(IServiceCollection services)

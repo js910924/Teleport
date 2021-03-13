@@ -1,0 +1,39 @@
+﻿@model string
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>History</title>
+</head>
+<body>
+<form asp-controller="Portfolio" asp-action="Index" method="post">
+    <label for="Date">Date</label>
+    <input type="date" id="Date" name="Date" value="" />
+    <label for="Ticker">Ticker</label>
+    <input type="text" id="Ticker" name="Ticker" value="" />
+    <label for="Action">Action</label>
+    <input type="text" id="Action" name="Action" value="" />
+    <label for="Quantity">Quantity</label>
+    <input type="text" id="Quantity" name="Quantity" value="" />
+    <label for="Price">Price</label>
+    <input type="text" id="Price" name="Price" value="" />
+
+    <input type="submit" value="Submit" />
+</form>
+
+<div>
+    @Model
+</div>
+</body>
+
+<script>
+    document.getElementById('Ticker').focus();
+    document.getElementById('Date').valueAsDate = new Date();
+</script>
+
+</html>
