@@ -17,17 +17,17 @@ namespace Teleport.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> History()
         {
             var stockTransactions = await _stockTransactionRepo.GetAllStockTransactions();
 
-            var json = JsonConvert.SerializeObject(stockTransactions.Select(trx => trx.ToStockTransactionDto()));
+            var stockTransactionDtos = stockTransactions.Select(trx => trx.ToStockTransactionDto());
 
-            return View("Index", json);
+            return View("History", stockTransactionDtos);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index(StockTransactionDto stockTransactionDto)
+        public async Task<IActionResult> History(StockTransactionDto stockTransactionDto)
         {
             var stockTransaction = stockTransactionDto.ToStockTransaction();
             var stockTransactions = (await _stockTransactionRepo.GetAllStockTransactions()).ToList();
@@ -36,9 +36,9 @@ namespace Teleport.Controllers
 
             await _stockTransactionRepo.UpsertStockTransactions(stockTransactions);
 
-            var json = JsonConvert.SerializeObject(stockTransactions.Select(trx => trx.ToStockTransactionDto()));
+            var stockTransactionDtos = stockTransactions.Select(trx => trx.ToStockTransactionDto());
 
-            return View("Index", json);
+            return View("History", stockTransactionDtos);
         }
 
         [HttpGet]

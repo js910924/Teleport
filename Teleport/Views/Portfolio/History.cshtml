@@ -1,0 +1,70 @@
+﻿@model IEnumerable<StockTransactionDto>
+
+@{
+    var dtoPropertyInfos = new StockTransactionDto().GetType().GetProperties();
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>History</title>
+</head>
+<body>
+<form asp-controller="Portfolio" asp-action="History" method="post">
+    <div class="form-group">
+        <label for="Date">Date</label>
+        <input class="form-control" type="date" id="Date" name="Date" value="" required=""/>
+    </div>
+    <div class="form-group">
+        <label for="Ticker">Ticker</label>
+        <input class="form-control" type="text" id="Ticker" name="Ticker" value="" required=""/>
+    </div>
+    <div class="form-group">
+        <label for="Action">Action</label>
+        <input class="form-control" type="text" id="Action" name="Action" value="" required=""/>
+    </div>
+    <div class="form-group">
+        <label for="Quantity">Quantity</label>
+        <input class="form-control" type="number" step="0.01" id="Quantity" name="Quantity" value="" required=""/>
+    </div>
+    <div class="form-group">
+        <label for="Price">Price</label>
+        <input class="form-control" type="number" step="0.01" id="Price" name="Price" value="" required=""/>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Ticker</th>
+            <th scope="col">Action</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Price</th>
+            <th scope="col">Total</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var dto in Model)
+        {
+            <tr>
+                <td>@dto.Date</td>
+                <td>@dto.Ticker</td>
+                <td>@dto.Action</td>
+                <td>@dto.Quantity.ToString("#.##")</td>
+                <td>$@dto.Price.ToString("#.##")</td>
+                <td>$@dto.Total.ToString("#.##")</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</body>
+
+<script>
+    document.getElementById('Ticker').focus();
+    document.getElementById('Date').valueAsDate = new Date();
+</script>
+
+</html>

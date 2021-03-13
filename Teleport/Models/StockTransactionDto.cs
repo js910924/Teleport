@@ -16,7 +16,7 @@ namespace Teleport.Models
             return new()
             {
                 Date = Convert.ToDateTime(Date),
-                Ticker = Ticker,
+                Ticker = Ticker.ToUpper(),
                 Action = Action,
                 Quantity = Quantity,
                 Price = Price,
