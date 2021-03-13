@@ -26,8 +26,8 @@
         <tr>
             <td>@dto.Ticker</td>
             <td>@dto.Shares</td>
-            <td>@dto.AveragePurchasePrice</td>
-            <td>@dto.CurrentPrice</td>
+            <td>$@dto.AveragePurchasePrice</td>
+            <td>$@dto.CurrentPrice</td>
             @if (dto.Change >= 0)
             {
                 <td style="color: green">@dto.PercentageOfChange.ToString("P2")</td>
