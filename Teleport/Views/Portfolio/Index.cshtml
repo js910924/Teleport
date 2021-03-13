@@ -1,9 +1,5 @@
 ﻿@model string
 
-@{
-    Layout = null;
-}
-
 <!DOCTYPE html>
 
 <html>
@@ -12,18 +8,27 @@
 </head>
 <body>
 <form asp-controller="Portfolio" asp-action="Index" method="post">
-    <label for="Date">Date</label>
-    <input type="date" id="Date" name="Date" value="" />
-    <label for="Ticker">Ticker</label>
-    <input type="text" id="Ticker" name="Ticker" value="" />
-    <label for="Action">Action</label>
-    <input type="text" id="Action" name="Action" value="" />
-    <label for="Quantity">Quantity</label>
-    <input type="text" id="Quantity" name="Quantity" value="" />
-    <label for="Price">Price</label>
-    <input type="text" id="Price" name="Price" value="" />
-
-    <input type="submit" value="Submit" />
+    <div class="form-group">
+        <label for="Date">Date</label>
+        <input class="form-control" type="date" id="Date" name="Date" value="" />
+    </div>
+    <div class="form-group">
+        <label for="Ticker">Ticker</label>
+        <input class="form-control" type="text" id="Ticker" name="Ticker" value="" />
+    </div>
+    <div class="form-group">
+        <label for="Action">Action</label>
+        <input class="form-control" type="text" id="Action" name="Action" value="" />
+    </div>
+    <div class="form-group">
+        <label for="Quantity">Quantity</label>
+        <input class="form-control" type="number" id="Quantity" name="Quantity" value="" />
+    </div>
+    <div class="form-group">
+        <label for="Price">Price</label>
+        <input class="form-control" type="number" id="Price" name="Price" value="" />
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 
 <div>
