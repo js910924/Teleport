@@ -27,7 +27,7 @@
     "Docker": {
       "commandName": "Docker",
       "launchBrowser": true,
-      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/Telegram",
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/Test",
       "publishAllPorts": true,
       "useSSL": true
     }

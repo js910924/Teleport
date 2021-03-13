@@ -30,8 +30,7 @@ namespace Teleport
             services.AddTransient<ITelegramService, TelegramService>();
             services.AddTransient<IPttService, PttService>();
 
-
-            ConfigureSchedulers(services);
+            //ConfigureSchedulers(services);
         }
 
         private static void ConfigureSchedulers(IServiceCollection services)
