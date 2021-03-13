@@ -9,7 +9,7 @@ namespace Teleport.Repository
 {
     public class StockTransactionRepo : IStockTransactionRepo
     {
-        private const string FilePath = @"/app/transactions.json";
+        private const string FilePath = @"/app/Database/transactions.json";
 
         public async Task<IEnumerable<StockTransaction>> GetAllStockTransactions()
         {
