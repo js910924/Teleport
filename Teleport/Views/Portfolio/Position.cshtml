@@ -1,11 +1,57 @@
-﻿@using Newtonsoft.Json
-@model IEnumerable<StockPosition>
+﻿@model IEnumerable<StockPosition>
 
 @{
     ViewBag.Title = "Position";
     Layout = "_Layout";
-
-    var json = JsonConvert.SerializeObject(Model);
 }
 
-@json
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Ticker</th>
+        <th scope="col">Shares</th>
+        <th scope="col">AveragePurchasePrice</th>
+        <th scope="col">CurrentPrice</th>
+        <th scope="col">Change %</th>
+        <th scope="col">Change $</th>
+        <th scope="col">Cost</th>
+        <th scope="col">CurrentValue</th>
+        <th scope="col">Gain %</th>
+        <th scope="col">Gain $</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var dto in Model)
+    {
+        <tr>
+            <td>@dto.Ticker</td>
+            <td>@dto.Shares</td>
+            <td>@dto.AveragePurchasePrice</td>
+            <td>@dto.CurrentPrice</td>
+            @if (dto.Change >= 0)
+            {
+                <td style="color: green">@dto.PercentageOfChange.ToString("P2")</td>
+                <td style="color: green">$@dto.Change</td>
+            }
+            else
+            {
+                <td style="color: red">@dto.PercentageOfChange.ToString("P2")</td>
+                <td style="color: red">$@dto.Change</td>
+            }
+            <td>$@dto.Cost</td>
+            <td>$@dto.CurrentValue</td>
+            @if (dto.Gain >= 0)
+            {
+                <td style="color: green">@dto.PercentageOfGain.ToString("P2")</td>
+                <td style="color: green">$@dto.Gain</td>
+
+            }
+            else
+            {
+                <td style="color: red">@dto.PercentageOfGain.ToString("P2")</td>
+                <td style="color: red">$@dto.Gain</td>
+            }
+        </tr>
+    }
+    </tbody>
+</table>

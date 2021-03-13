@@ -25,7 +25,7 @@ namespace Teleport.Proxy
                     Symbol = stockSymbol,
                     Price = 500m,
                     PercentageOfChange = -0.1667m,
-                    Change = 100m
+                    Change = -100m
                 };
             }
 
