@@ -4,20 +4,25 @@ using System.Linq;
 using System.Threading.Tasks;
 using Teleport.Models;
 using Teleport.Proxy;
+using Teleport.Repository;
 
 namespace Teleport.Services
 {
     public class StockService : IStockService
     {
         private readonly IStockProxy _stockProxy;
+        private readonly IStockTransactionRepo _stockTransactionRepo;
 
-        public StockService(IStockProxy stockProxy)
+        public StockService(IStockProxy stockProxy, IStockTransactionRepo stockTransactionRepo)
         {
             _stockProxy = stockProxy;
+            _stockTransactionRepo = stockTransactionRepo;
         }
 
-        public IEnumerable<StockPosition> GetAllStockPositions(IEnumerable<StockTransaction> stockTransactions)
+        public async Task<IEnumerable<StockPosition>> GetAllStockPositions()
         {
+            var stockTransactions = await _stockTransactionRepo.GetAllStockTransactions();
+
             var stockPositions = stockTransactions
                 .GroupBy(trx => trx.Ticker, trx => trx, (ticker, tickerTransaction) =>
                 {
@@ -35,7 +40,6 @@ namespace Teleport.Services
 
             var tasks = Enumerable.Empty<Task>().ToList();
             tasks.AddRange(stockPositions.Select(position => GetRealTimeStockPosition(position)));
-
             Task.WaitAll(tasks.ToArray());
 
             return stockPositions;

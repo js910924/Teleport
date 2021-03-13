@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
 using Teleport.Models;
 using Teleport.Proxy;
+using Teleport.Repository;
 using Teleport.Services;
 
 namespace Teleport.UnitTests.Service
@@ -14,29 +16,24 @@ namespace Teleport.UnitTests.Service
     {
         private IStockProxy _stockProxy;
         private StockService _stockService;
+        private IStockTransactionRepo _stockTransactionRepo;
 
         [SetUp]
         public void SetUp()
         {
             _stockProxy = Substitute.For<IStockProxy>();
+            _stockTransactionRepo = Substitute.For<IStockTransactionRepo>();
 
-            _stockService = new StockService(_stockProxy);
+            _stockService = new StockService(_stockProxy, _stockTransactionRepo);
         }
 
         [Test]
-        public void should_convert_all_history_stock_transactions_to_stock_position()
+        public async Task should_convert_all_history_stock_transactions_to_stock_position()
         {
             GiveStockInfo("AAPL", 200m, 0.0526m, 10m);
+            GivenAllStockTransaction(new StockTransaction {Ticker = "AAPL", Quantity = 1, Price = 190m});
 
-            var stockPositions = _stockService.GetAllStockPositions(new List<StockTransaction>()
-            {
-                new StockTransaction
-                {
-                    Ticker = "AAPL",
-                    Quantity = 1,
-                    Price = 190m,
-                }
-            });
+            var stockPositions = await _stockService.GetAllStockPositions();
 
             stockPositions.Should().BeEquivalentTo(new List<StockPosition>()
             {
@@ -57,19 +54,18 @@ namespace Teleport.UnitTests.Service
         }
 
         [Test]
-        public void should_convert_all_history_stock_transactions_to_stock_position_with_average_purchase_price()
+        public async Task should_convert_all_history_stock_transactions_to_stock_position_with_average_purchase_price()
         {
             GiveStockInfo("AAPL", 200m, 0.0526m, 10m);
             GiveStockInfo("TSLA", 500m, -0.1667m, -100m);
-
-            var stockPositions = _stockService.GetAllStockPositions(new List<StockTransaction>()
-            {
+            GivenAllStockTransaction(
                 new StockTransaction { Ticker = "AAPL", Quantity = 1, Price = 200m, },
                 new StockTransaction { Ticker = "AAPL", Quantity = 1, Price = 150m, },
                 new StockTransaction { Ticker = "AAPL", Quantity = 2, Price = 180m, },
                 new StockTransaction { Ticker = "TSLA", Quantity = 1, Price = 700m, },
-                new StockTransaction { Ticker = "TSLA", Quantity = 1, Price = 600m, },
-            });
+                new StockTransaction { Ticker = "TSLA", Quantity = 1, Price = 600m, });
+
+            var stockPositions = await _stockService.GetAllStockPositions();
 
             stockPositions.Should().BeEquivalentTo(new List<StockPosition>()
             {
@@ -100,6 +96,11 @@ namespace Teleport.UnitTests.Service
                     Gain = -300m
                 }
             });
+        }
+
+        private void GivenAllStockTransaction(params StockTransaction[] transactions)
+        {
+            _stockTransactionRepo.GetAllStockTransactions().Returns(Task.FromResult((IEnumerable<StockTransaction>) transactions));
         }
 
         private void GiveStockInfo(string stockSymbol, decimal price, decimal percentageOfChange, decimal change)

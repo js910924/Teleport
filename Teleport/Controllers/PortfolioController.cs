@@ -51,7 +51,7 @@ namespace Teleport.Controllers
 
         public async Task<ViewResult> Position()
         {
-            var stockPositions = _stockService.GetAllStockPositions(await _stockTransactionRepo.GetAllStockTransactions());
+            var stockPositions = await _stockService.GetAllStockPositions();
 
             return View("Position", stockPositions);
         }
