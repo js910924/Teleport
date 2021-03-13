@@ -1,22 +1,23 @@
 using System;
-using System.Globalization;
 using System.Net.Http;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Teleport.Models;
 
 namespace Teleport.Proxy
 {
     public class StockProxy : IStockProxy
     {
+        private readonly HttpClient _httpClient;
+
+        public StockProxy(IHttpClientFactory httpClientFactory)
+        {
+            _httpClient = httpClientFactory.CreateClient();
+            _httpClient.BaseAddress = new Uri("https://finance.yahoo.com/quote/");
+        }
+
         public StockInfo GetStockInfo(string stockSymbol)
         {
-            var httpClient = new HttpClient()
-            {
-                BaseAddress = new Uri("https://finance.yahoo.com/quote/")
-            };
-
-            var response = httpClient.GetStringAsync(stockSymbol).GetAwaiter().GetResult();
+            var response = _httpClient.GetStringAsync(stockSymbol).GetAwaiter().GetResult();
             var regex = new Regex(@"<span class=""Trsdu\(0\.3s\) Fw\(b\) Fz\(36px\) Mb\(-4px\) D\(ib\)"" data-reactid=""32"">([0-9]*.[0-9]*)<\/span>");
             var match = regex.Match(response);
             decimal.TryParse(match.Groups[1].Value, out var price);
