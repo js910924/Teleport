@@ -1,0 +1,11 @@
+﻿@using Newtonsoft.Json
+@model IEnumerable<StockPosition>
+
+@{
+    ViewBag.Title = "Position";
+    Layout = "_Layout";
+
+    var json = JsonConvert.SerializeObject(Model);
+}
+
+@json

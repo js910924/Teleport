@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Quartz;
 using Quartz.Impl;
+using Teleport.Proxy;
 using Teleport.Repository;
 using Teleport.Services;
 using Teleport.Services.Interfaces;
@@ -32,6 +33,7 @@ namespace Teleport
             services.AddTransient<IPttService, PttService>();
 
             ConfigureRepo(services);
+            services.AddTransient<IStockProxy, StockProxy>();
 
             //ConfigureSchedulers(services);
         }
