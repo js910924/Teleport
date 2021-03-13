@@ -42,8 +42,6 @@ namespace Teleport.UnitTests.Controller
 
             var viewResult = await _controller.Position();
 
-            //stockTransactionRepo.GetAllStockTransactions()
-
             ((IEnumerable<StockPosition>)viewResult.Model).Should().BeEquivalentTo(new List<StockPosition>()
             {
                 new StockPosition()
