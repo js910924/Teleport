@@ -3,33 +3,32 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
-using Teleport.Controllers;
 using Teleport.Models;
 using Teleport.Proxy;
-using Teleport.Repository;
+using Teleport.Services;
 
-namespace Teleport.UnitTests.Controller
+namespace Teleport.UnitTests.Service
 {
     [TestFixture]
-    public class PortfolioControllerTests
+    public class StockServiceTests
     {
-        private PortfolioController _controller;
-        private IStockTransactionRepo _stockTransactionRepo;
         private IStockProxy _stockProxy;
+        private StockService _stockService;
 
         [SetUp]
         public void SetUp()
         {
-            _stockTransactionRepo = Substitute.For<IStockTransactionRepo>();
             _stockProxy = Substitute.For<IStockProxy>();
 
-            _controller = new PortfolioController(_stockTransactionRepo, _stockProxy);
+            _stockService = new StockService(_stockProxy);
         }
 
         [Test]
-        public async Task should_convert_all_history_stock_transactions_to_stock_position()
+        public void should_convert_all_history_stock_transactions_to_stock_position()
         {
-            _stockTransactionRepo.GetAllStockTransactions().Returns(new List<StockTransaction>()
+            GiveStockInfo("AAPL", 200m, 0.0526m, 10m);
+
+            var stockPositions = _stockService.GetAllStockPositions(new List<StockTransaction>()
             {
                 new StockTransaction
                 {
@@ -38,11 +37,8 @@ namespace Teleport.UnitTests.Controller
                     Price = 190m,
                 }
             });
-            GiveStockInfo("AAPL", 200m, 0.0526m, 10m);
 
-            var viewResult = await _controller.Position();
-
-            viewResult.Model.Should().BeEquivalentTo(new List<StockPosition>()
+            stockPositions.Should().BeEquivalentTo(new List<StockPosition>()
             {
                 new StockPosition()
                 {
@@ -61,9 +57,12 @@ namespace Teleport.UnitTests.Controller
         }
 
         [Test]
-        public async Task should_convert_all_history_stock_transactions_to_stock_position_with_average_purchase_price()
+        public void should_convert_all_history_stock_transactions_to_stock_position_with_average_purchase_price()
         {
-            _stockTransactionRepo.GetAllStockTransactions().Returns(new List<StockTransaction>()
+            GiveStockInfo("AAPL", 200m, 0.0526m, 10m);
+            GiveStockInfo("TSLA", 500m, -0.1667m, -100m);
+
+            var stockPositions = _stockService.GetAllStockPositions(new List<StockTransaction>()
             {
                 new StockTransaction { Ticker = "AAPL", Quantity = 1, Price = 200m, },
                 new StockTransaction { Ticker = "AAPL", Quantity = 1, Price = 150m, },
@@ -71,12 +70,8 @@ namespace Teleport.UnitTests.Controller
                 new StockTransaction { Ticker = "TSLA", Quantity = 1, Price = 700m, },
                 new StockTransaction { Ticker = "TSLA", Quantity = 1, Price = 600m, },
             });
-            GiveStockInfo("AAPL", 200m, 0.0526m, 10m);
-            GiveStockInfo("TSLA", 500m, -0.1667m, -100m);
 
-            var viewResult = await _controller.Position();
-
-            viewResult.Model.Should().BeEquivalentTo(new List<StockPosition>()
+            stockPositions.Should().BeEquivalentTo(new List<StockPosition>()
             {
                 new StockPosition()
                 {
@@ -109,8 +104,8 @@ namespace Teleport.UnitTests.Controller
 
         private void GiveStockInfo(string stockSymbol, decimal price, decimal percentageOfChange, decimal change)
         {
-              _stockProxy.GetStockInfo(stockSymbol).Returns(
-                  Task.FromResult(new StockInfo() {Symbol = stockSymbol, Price = price, PercentageOfChange = percentageOfChange, Change = change}));
+            _stockProxy.GetStockInfo(stockSymbol).Returns(
+                Task.FromResult(new StockInfo() { Symbol = stockSymbol, Price = price, PercentageOfChange = percentageOfChange, Change = change }));
         }
     }
 }

@@ -29,13 +29,18 @@ namespace Teleport
 
             ConfigureHttpClient(services);
 
-            services.AddTransient<ITelegramService, TelegramService>();
-            services.AddTransient<IPttService, PttService>();
-
+            ConfigureService(services);
             ConfigureRepo(services);
             services.AddTransient<IStockProxy, StockProxy>();
 
             //ConfigureSchedulers(services);
+        }
+
+        private static void ConfigureService(IServiceCollection services)
+        {
+            services.AddTransient<ITelegramService, TelegramService>();
+            services.AddTransient<IPttService, PttService>();
+            services.AddTransient<IStockService, StockService>();
         }
 
         private static void ConfigureRepo(IServiceCollection services)
