@@ -4,6 +4,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>d7aed60a-db03-4339-98dd-e6544b50152a</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <AssemblyName>Teleport</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
