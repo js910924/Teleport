@@ -17,7 +17,7 @@ namespace Teleport.Models
             {
                 Date = Convert.ToDateTime(Date),
                 Ticker = Ticker.ToUpper(),
-                Action = Action,
+                Action = Enum.Parse<StockAction>(Action),
                 Quantity = Quantity,
                 Price = Price,
                 Total = Total,

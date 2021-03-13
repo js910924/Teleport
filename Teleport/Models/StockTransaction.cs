@@ -6,7 +6,7 @@ namespace Teleport.Models
     {
         public DateTime Date { get; set; }
         public string Ticker { get; set; }
-        public string Action { get; set; }
+        public StockAction Action { get; set; }
         public decimal Quantity { get; set; }
         public decimal Price { get; set; }
         public decimal Total { get; set; }
@@ -18,7 +18,7 @@ namespace Teleport.Models
             {
                 Date = Date.ToString("MM/dd/yyyy"),
                 Ticker = Ticker,
-                Action = Action,
+                Action = Action.ToString(),
                 Quantity = Quantity,
                 Price = Price,
             };

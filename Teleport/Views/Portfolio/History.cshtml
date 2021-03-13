@@ -5,11 +5,6 @@
     Layout = "_Layout";
 }
 
-<script>
-    document.getElementById('Ticker').focus();
-    document.getElementById('Date').valueAsDate = new Date();
-</script>
-
 <form asp-controller="Portfolio" asp-action="History" method="post">
     <div class="form-group">
         <label for="Date">Date</label>
@@ -47,16 +42,21 @@
         </tr>
     </thead>
     <tbody>
-    @foreach (var dto in Model)
-    {
-        <tr>
-            <td>@dto.Date</td>
-            <td>@dto.Ticker</td>
-            <td>@dto.Action</td>
-            <td>@dto.Quantity.ToString("#.##")</td>
-            <td>$@dto.Price.ToString("#.##")</td>
-            <td>$@dto.Total.ToString("#.##")</td>
-        </tr>
-    }
+        @foreach (var dto in Model)
+        {
+            <tr>
+                <td>@dto.Date</td>
+                <td>@dto.Ticker</td>
+                <td>@dto.Action</td>
+                <td>@dto.Quantity.ToString("#.##")</td>
+                <td>$@dto.Price.ToString("#.##")</td>
+                <td>$@dto.Total.ToString("#.##")</td>
+            </tr>
+        }
     </tbody>
 </table>
+
+<script>
+    document.getElementById("Ticker").focus();
+    document.getElementById("Date").valueAsDate = new Date();
+</script>
