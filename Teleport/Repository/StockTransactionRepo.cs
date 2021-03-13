@@ -22,7 +22,7 @@ namespace Teleport.Repository
             return Enumerable.Empty<StockTransaction>();
         }
 
-        public async Task UpsertStockTransactions(IEnumerable stockTransactions)
+        public async Task UpsertStockTransactions(IEnumerable<StockTransaction> stockTransactions)
         {
             var json = JsonConvert.SerializeObject(stockTransactions);
 

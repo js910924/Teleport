@@ -8,7 +8,7 @@ namespace Teleport.Repository
     public interface IStockTransactionRepo
     {
         Task<IEnumerable<StockTransaction>> GetAllStockTransactions();
-        Task UpsertStockTransactions(IEnumerable stockTransactions);
+        Task UpsertStockTransactions(IEnumerable<StockTransaction> stockTransactions);
         void DeleteAllHistoryTransactions();
     }
 }
