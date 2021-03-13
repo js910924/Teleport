@@ -21,7 +21,7 @@ namespace Teleport.Services
 
         public async Task<IEnumerable<StockPosition>> GetAllStockPositions()
         {
-            var stockTransactions = await _stockTransactionRepo.GetAllStockTransactions();
+            var stockTransactions = await GetAllStockTransactions();
 
             var stockPositions = stockTransactions
                 .GroupBy(trx => trx.Ticker, trx => trx, (ticker, tickerTransaction) =>
@@ -43,6 +43,27 @@ namespace Teleport.Services
             Task.WaitAll(tasks.ToArray());
 
             return stockPositions;
+        }
+
+        public async Task<List<StockTransaction>> UpsertStockTransactions(StockTransaction stockTransaction)
+        {
+            var stockTransactions = (await GetAllStockTransactions()).ToList();
+
+            stockTransactions.Add(stockTransaction);
+
+            await _stockTransactionRepo.UpsertStockTransactions(stockTransactions);
+
+            return stockTransactions;
+        }
+
+        public async Task<IEnumerable<StockTransaction>> GetAllStockTransactions()
+        {
+            return await _stockTransactionRepo.GetAllStockTransactions();
+        }
+
+        public void DeleteAllTransactions()
+        {
+            _stockTransactionRepo.DeleteAllHistoryTransactions();
         }
 
         private async Task GetRealTimeStockPosition(StockPosition position)

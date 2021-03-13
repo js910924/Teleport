@@ -2,26 +2,23 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Teleport.Models;
-using Teleport.Repository;
 using Teleport.Services;
 
 namespace Teleport.Controllers
 {
     public class PortfolioController : Controller
     {
-        private readonly IStockTransactionRepo _stockTransactionRepo;
         private readonly IStockService _stockService;
 
-        public PortfolioController(IStockTransactionRepo stockTransactionRepo, IStockService stockService)
+        public PortfolioController(IStockService stockService)
         {
-            _stockTransactionRepo = stockTransactionRepo;
             _stockService = stockService;
         }
 
         [HttpGet]
         public async Task<IActionResult> History()
         {
-            var stockTransactions = await _stockTransactionRepo.GetAllStockTransactions();
+            var stockTransactions = await _stockService.GetAllStockTransactions();
 
             var stockTransactionDtos = stockTransactions.Select(trx => trx.ToStockTransactionDto());
 
@@ -32,11 +29,7 @@ namespace Teleport.Controllers
         public async Task<IActionResult> History(StockTransactionDto stockTransactionDto)
         {
             var stockTransaction = stockTransactionDto.ToStockTransaction();
-            var stockTransactions = (await _stockTransactionRepo.GetAllStockTransactions()).ToList();
-
-            stockTransactions.Add(stockTransaction);
-
-            await _stockTransactionRepo.UpsertStockTransactions(stockTransactions);
+            var stockTransactions = await _stockService.UpsertStockTransactions(stockTransaction);
 
             var stockTransactionDtos = stockTransactions.Select(trx => trx.ToStockTransactionDto());
 
@@ -46,7 +39,7 @@ namespace Teleport.Controllers
         [HttpGet]
         public void DeleteAllHistoryTransactions()
         {
-            _stockTransactionRepo.DeleteAllHistoryTransactions();
+            _stockService.DeleteAllTransactions();
         }
 
         public async Task<ViewResult> Position()
