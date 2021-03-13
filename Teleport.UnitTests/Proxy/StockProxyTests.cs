@@ -9,12 +9,13 @@ namespace Teleport.UnitTests.Proxy
     [TestFixture]
     public class StockProxyTests
     {
+        [Ignore("Test API")]
         [Test]
-        public async Task should_get_stock_info_when_call_GetStockInfo()
+        public void should_get_stock_info_when_call_GetStockInfo()
         {
-            var stockProxy = new StockProxy();
+            //var stockProxy = new StockProxy();
 
-            var stockInfo = stockProxy.GetStockInfo("F");
+            //var stockInfo = stockProxy.GetStockInfo("F");
 
             //stockInfo.Should().BeEquivalentTo(new StockInfo
             //{
