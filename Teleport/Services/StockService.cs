@@ -24,11 +24,13 @@ namespace Teleport.Services
             var stockTransactions = await GetAllStockTransactions();
 
             var stockPositions = stockTransactions
+                .Where(trx => trx.Action == StockAction.Buy || trx.Action == StockAction.Sell)
                 .GroupBy(trx => trx.Ticker, trx => trx, (ticker, tickerTransaction) =>
                 {
-                    var transactions = tickerTransaction.ToList();
-                    var shares = (int) transactions.Sum(trx => trx.Quantity);
-                    var cost = transactions.Sum(trx => trx.Quantity * trx.Price);
+                    var buyTransactions = tickerTransaction.Where(trx => trx.Action == StockAction.Buy);
+                    var sellTransactions = tickerTransaction.Where(trx => trx.Action == StockAction.Sell);
+                    var shares = (int) buyTransactions.Sum(trx => trx.Quantity) - (int) sellTransactions.Sum(trx => trx.Quantity);
+                    var cost = buyTransactions.Sum(trx => trx.Quantity * trx.Price) - sellTransactions.Sum(trx => trx.Quantity * trx.Price);
                     return new StockPosition
                     {
                         Ticker = ticker,
