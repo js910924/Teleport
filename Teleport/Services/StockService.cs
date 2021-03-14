@@ -13,12 +13,14 @@ namespace Teleport.Services
         private readonly IStockProxy _stockProxy;
         private readonly IStockTransactionRepo _stockTransactionRepo;
         private readonly IStockInfoRepo _stockInfoRepo;
+        private readonly IStockMarketChecker _stockMarketChecker;
 
-        public StockService(IStockProxy stockProxy, IStockTransactionRepo stockTransactionRepo, IStockInfoRepo stockInfoRepo)
+        public StockService(IStockProxy stockProxy, IStockTransactionRepo stockTransactionRepo, IStockInfoRepo stockInfoRepo, IStockMarketChecker stockMarketChecker)
         {
             _stockProxy = stockProxy;
             _stockTransactionRepo = stockTransactionRepo;
             _stockInfoRepo = stockInfoRepo;
+            _stockMarketChecker = stockMarketChecker;
         }
 
         public async Task<IEnumerable<StockPosition>> GetAllStockPositions()
@@ -77,7 +79,7 @@ namespace Teleport.Services
         private async Task GetRealTimeStockPosition(StockPosition position)
         {
             var stockInfo = await _stockInfoRepo.GetStockInfo(position.Ticker);
-            if (stockInfo.Symbol != position.Ticker)
+            if (stockInfo.Symbol != position.Ticker || ShouldGetStockInfoFromProxy(stockInfo))
             {
                 stockInfo = await _stockProxy.GetStockInfo(position.Ticker);
                 await _stockInfoRepo.UpsertStockInfo(stockInfo);
@@ -88,10 +90,28 @@ namespace Teleport.Services
 
             position.CurrentPrice = stockInfo.Price;
             position.CurrentValue = currentValue;
-            position.PercentageOfChange = stockInfo.PercentageOfChange;
+            position.PercentageOfChange = Math.Round(stockInfo.PercentageOfChange, 4);
             position.Change = stockInfo.Change;
             position.Gain = gain;
-            position.PercentageOfGain = gain / position.Cost;
+            position.PercentageOfGain = Math.Round(gain / position.Cost, 4);
+        }
+
+        private bool ShouldGetStockInfoFromProxy(StockInfo stockInfo)
+        {
+            var isOpenMarket = _stockMarketChecker.IsOpenMarket();
+            var isModifiedOnInOpenMarket = _stockMarketChecker.IsInOpenMarket(stockInfo.ModifiedOn);
+            if (!isOpenMarket && !isModifiedOnInOpenMarket)
+            {
+                return false;
+            }
+
+            var isModifiedOnTenSecondsAgo = _stockMarketChecker.IsTenSecondsAgo(stockInfo.ModifiedOn);
+            if (isModifiedOnTenSecondsAgo)
+            {
+                return true;
+            }
+
+            return !isOpenMarket;
         }
     }
 }

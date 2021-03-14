@@ -42,6 +42,7 @@ namespace Teleport
             services.AddTransient<ITelegramService, TelegramService>();
             services.AddTransient<IPttService, PttService>();
             services.AddTransient<IStockService, StockService>();
+            services.AddTransient<IStockMarketChecker, StockMarketChecker>();
         }
 
         private static void ConfigureRepo(IServiceCollection services)
