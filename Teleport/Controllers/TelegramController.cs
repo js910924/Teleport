@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using Teleport.Services.Interfaces;
+using Teleport.Services;
 
 namespace Teleport.Controllers
 {

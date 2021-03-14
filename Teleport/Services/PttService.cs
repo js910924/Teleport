@@ -5,7 +5,6 @@ using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Teleport.Entities;
-using Teleport.Services.Interfaces;
 
 namespace Teleport.Services
 {

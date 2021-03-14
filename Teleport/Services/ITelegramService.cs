@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Teleport.Services.Interfaces
+namespace Teleport.Services
 {
     public interface ITelegramService
     {

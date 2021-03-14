@@ -1,6 +1,5 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
-using Teleport.Services.Interfaces;
 
 namespace Teleport.Services
 {

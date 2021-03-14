@@ -2,7 +2,7 @@
 using Quartz;
 using Quartz.Spi;
 
-namespace Teleport
+namespace Teleport.Factory
 {
     public class QuartzJobFactory : IJobFactory
     {

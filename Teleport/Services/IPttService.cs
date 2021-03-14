@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Teleport.Entities;
 
-namespace Teleport.Services.Interfaces
+namespace Teleport.Services
 {
     public interface IPttService
     {

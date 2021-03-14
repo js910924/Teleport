@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Quartz;
-using Teleport.Services.Interfaces;
+using Teleport.Services;
 
-namespace Teleport
+namespace Teleport.Job
 {
     public class FetchStockTickerJob : IJob
     {
@@ -21,7 +21,7 @@ namespace Teleport
             var articleLinks = await _pttService.CrawlTargetArticleLinks("Stock", "標的", 3);
 
             var tasks = articleLinks
-                .Select(link => Task.Run(() => _telegramService.SendMessage(link.ToPttLink())));
+                .Select(link => Task.Run<string>(() => _telegramService.SendMessage(link.ToPttLink())));
 
             Task.WaitAll(tasks.ToArray());
         }

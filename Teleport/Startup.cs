@@ -6,10 +6,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Quartz;
 using Quartz.Impl;
+using Teleport.Factory;
+using Teleport.Job;
 using Teleport.Proxy;
 using Teleport.Repository;
 using Teleport.Services;
-using Teleport.Services.Interfaces;
 
 namespace Teleport
 {
