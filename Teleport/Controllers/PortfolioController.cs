@@ -27,7 +27,7 @@ namespace Teleport.Controllers
         }
 
         [HttpPost]
-        public async Task<ViewResult> History(StockTransactionDto stockTransactionDto)
+        public async Task<ViewResult> AddStockTransaction(StockTransactionDto stockTransactionDto)
         {
             var stockTransaction = stockTransactionDto.ToStockTransaction();
             var stockTransactions = await _stockService.UpsertStockTransactions(stockTransaction);
