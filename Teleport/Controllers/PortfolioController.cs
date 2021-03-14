@@ -53,7 +53,7 @@ namespace Teleport.Controllers
             return View("Position", stockPositions);
         }
 
-        public async Task<JsonResult> ImportMyExcelTransactions()
+        public async Task<RedirectToActionResult> ImportMyExcelTransactions()
         {
             var data = await System.IO.File.ReadAllLinesAsync(@"/app/Database/test.txt");
             var stockTransactionDtos = data.Select(d =>
@@ -75,7 +75,7 @@ namespace Teleport.Controllers
                 await _stockService.UpsertStockTransactions(stockTransaction);
             }
 
-            return new JsonResult("Done");
+            return RedirectToAction("History");
         }
     }
 }
