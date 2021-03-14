@@ -8,7 +8,7 @@ namespace Teleport.Proxy
 {
     public class StockProxy : IStockProxy
     {
-        private const string YahooFinancePricePattern = @"<span class=""Trsdu\(0\.3s\) Fw\(b\) Fz\(36px\) Mb\(-4px\) D\(ib\)"" data-reactid=""32"">([0-9]*.[0-9]*)<\/span>";
+        private const string YahooFinancePricePattern = @"<span class=""Trsdu\(0\.3s\) Fw\(b\) Fz\(36px\) Mb\(-4px\) D\(ib\)"" data-reactid=""32"">([0-9]*,?[0-9]*.[0-9]*)<\/span>";
         private const string YahooFinanceDailyChangePattern = @"<span class=""Trsdu\(0\.3s\) Fw\(500\) Pstart\(10px\) Fz\(24px\) C\(.*\)"" data-reactid=""33"">(.*) \((.*)%\)<\/span>";
         private readonly HttpClient _httpClient;
 
