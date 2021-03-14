@@ -27,26 +27,7 @@ namespace Teleport.Services
         {
             var stockTransactions = await GetAllStockTransactions();
 
-            var stockPositions =
-                stockTransactions
-                    .Where(trx => trx.Action == StockAction.Buy || trx.Action == StockAction.Sell)
-                    .GroupBy(trx => trx.Ticker)
-                    .Where(tickerGroup => tickerGroup.Sum(g => g.Action == StockAction.Buy ? g.Quantity : g.Quantity * -1) > 0)
-                    .Select(group =>
-                    {
-                        var transactions = group.ToList();
-                        var buyTransactions = transactions.Where(trx => trx.Action == StockAction.Buy).ToList();
-                        var sellTransactions = transactions.Where(trx => trx.Action == StockAction.Sell).ToList();
-                        var shares = (int) (buyTransactions.Sum(trx => trx.Quantity) - sellTransactions.Sum(trx => trx.Quantity));
-                        var cost = buyTransactions.Sum(trx => trx.Quantity * trx.Price) - sellTransactions.Sum(trx => trx.Quantity * trx.Price);
-                        return new StockPosition
-                        {
-                            Ticker = group.Key,
-                            Shares = shares,
-                            AveragePurchasePrice = Math.Round(cost / shares, 2),
-                            Cost = cost,
-                        };
-                    }).ToList();
+            var stockPositions = ToStockPositions(stockTransactions);
 
             foreach (var stockPosition in stockPositions)
             {
@@ -74,6 +55,29 @@ namespace Teleport.Services
         public async Task UpsertAllStockTransactions(IEnumerable<StockTransaction> stockTransactions)
         {
             await _stockTransactionRepo.UpsertStockTransactions(stockTransactions);
+        }
+
+        private static List<StockPosition> ToStockPositions(IEnumerable<StockTransaction> stockTransactions)
+        {
+            return stockTransactions
+                .Where(trx => trx.Action == StockAction.Buy || trx.Action == StockAction.Sell)
+                .GroupBy(trx => trx.Ticker)
+                .Where(tickerGroup => tickerGroup.Sum(g => g.Action == StockAction.Buy ? g.Quantity : g.Quantity * -1) > 0)
+                .Select(group =>
+                {
+                    var transactions = group.ToList();
+                    var buyTransactions = transactions.Where(trx => trx.Action == StockAction.Buy).ToList();
+                    var sellTransactions = transactions.Where(trx => trx.Action == StockAction.Sell).ToList();
+                    var shares = (int) (buyTransactions.Sum(trx => trx.Quantity) - sellTransactions.Sum(trx => trx.Quantity));
+                    var cost = buyTransactions.Sum(trx => trx.Quantity * trx.Price) - sellTransactions.Sum(trx => trx.Quantity * trx.Price);
+                    return new StockPosition
+                    {
+                        Ticker = group.Key,
+                        Shares = shares,
+                        AveragePurchasePrice = Math.Round(cost / shares, 2),
+                        Cost = cost,
+                    };
+                }).ToList();
         }
 
         private async Task GetRealTimeStockPosition(StockPosition position)
