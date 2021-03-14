@@ -70,10 +70,16 @@ namespace Teleport.Controllers
                 };
             });
 
-            foreach (var stockTransaction in stockTransactionDtos.Select(dto => dto.ToStockTransaction()))
+            var id = 1;
+            var stockTransactions = stockTransactionDtos.Select(dto =>
             {
-                await _stockService.UpsertStockTransaction(stockTransaction);
-            }
+                var transaction = dto.ToStockTransaction();
+                transaction.Id = id++;
+
+                return transaction;
+            });
+
+            await _stockService.UpsertAllStockTransactions(stockTransactions);
 
             return RedirectToAction("History");
         }

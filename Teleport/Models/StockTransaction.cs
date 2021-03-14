@@ -4,6 +4,7 @@ namespace Teleport.Models
 {
     public class StockTransaction
     {
+        public int Id { get; set; }
         public DateTime Date { get; set; }
         public string Ticker { get; set; }
         public StockAction Action { get; set; }

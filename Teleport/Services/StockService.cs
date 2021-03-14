@@ -58,9 +58,10 @@ namespace Teleport.Services
         {
             var stockTransactions = (await GetAllStockTransactions()).ToList();
 
+            stockTransaction.Id = stockTransactions.Max(trx => trx.Id) + 1;
             stockTransactions.Add(stockTransaction);
 
-            await _stockTransactionRepo.UpsertStockTransactions(stockTransactions);
+            await UpsertAllStockTransactions(stockTransactions);
 
             return stockTransactions;
         }
@@ -73,6 +74,11 @@ namespace Teleport.Services
         public void DeleteAllTransactions()
         {
             _stockTransactionRepo.DeleteAllHistoryTransactions();
+        }
+
+        public async Task UpsertAllStockTransactions(IEnumerable<StockTransaction> stockTransactions)
+        {
+            await _stockTransactionRepo.UpsertStockTransactions(stockTransactions);
         }
 
         private async Task GetRealTimeStockPosition(StockPosition position)
