@@ -54,7 +54,7 @@ namespace Teleport.Services
             return stockPositions;
         }
 
-        public async Task<List<StockTransaction>> UpsertStockTransactions(StockTransaction stockTransaction)
+        public async Task<List<StockTransaction>> UpsertStockTransaction(StockTransaction stockTransaction)
         {
             var stockTransactions = (await GetAllStockTransactions()).ToList();
 

@@ -30,7 +30,7 @@ namespace Teleport.Controllers
         public async Task<ViewResult> AddStockTransaction(StockTransactionDto stockTransactionDto)
         {
             var stockTransaction = stockTransactionDto.ToStockTransaction();
-            var stockTransactions = await _stockService.UpsertStockTransactions(stockTransaction);
+            var stockTransactions = await _stockService.UpsertStockTransaction(stockTransaction);
 
             var stockTransactionDtos = stockTransactions.Select(trx => trx.ToStockTransactionDto());
 
@@ -72,7 +72,7 @@ namespace Teleport.Controllers
 
             foreach (var stockTransaction in stockTransactionDtos.Select(dto => dto.ToStockTransaction()))
             {
-                await _stockService.UpsertStockTransactions(stockTransaction);
+                await _stockService.UpsertStockTransaction(stockTransaction);
             }
 
             return RedirectToAction("History");
