@@ -88,10 +88,10 @@ namespace Teleport.Services
 
             position.CurrentPrice = stockInfo.Price;
             position.CurrentValue = currentValue;
-            position.PercentageOfChange = Math.Round(stockInfo.PercentageOfChange, 4);
+            position.PercentageOfChange = stockInfo.PercentageOfChange;
             position.Change = stockInfo.Change;
             position.Gain = gain;
-            position.PercentageOfGain = Math.Round(gain / position.Cost, 4);
+            position.PercentageOfGain = gain / position.Cost;
         }
     }
 }

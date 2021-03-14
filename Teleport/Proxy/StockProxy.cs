@@ -30,8 +30,8 @@ namespace Teleport.Proxy
             if (priceMatch.Success && dailyChangeMatch.Success)
             {
                 var price = Convert.ToDecimal(priceMatch.Groups[1].Value);
-                var percentageOfChange = Convert.ToDecimal(dailyChangeMatch.Groups[1].Value);
-                var change = Convert.ToDecimal(dailyChangeMatch.Groups[2].Value);
+                var change = Convert.ToDecimal(dailyChangeMatch.Groups[1].Value);
+                var percentageOfChange = Convert.ToDecimal(dailyChangeMatch.Groups[2].Value);
 
                 return new StockInfo
                 {

@@ -48,9 +48,9 @@
                 <td>@dto.Date</td>
                 <td>@dto.Ticker</td>
                 <td>@dto.Action</td>
-                <td>@dto.Quantity.ToString("#.##")</td>
-                <td>$@dto.Price.ToString("#.##")</td>
-                <td>$@dto.Total.ToString("#.##")</td>
+                <td>@dto.Quantity.ToString("F2")</td>
+                <td>$@dto.Price.ToString("F2")</td>
+                <td>$@dto.Total.ToString("F2")</td>
             </tr>
         }
     </tbody>
