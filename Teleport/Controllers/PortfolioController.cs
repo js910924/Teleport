@@ -38,9 +38,11 @@ namespace Teleport.Controllers
         }
 
         [HttpGet]
-        public void DeleteAllHistoryTransactions()
+        public RedirectToActionResult DeleteAllHistoryTransactions()
         {
             _stockService.DeleteAllTransactions();
+
+            return RedirectToAction("History");
         }
 
         [HttpGet]
