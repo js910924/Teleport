@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Teleport.Models;
@@ -48,6 +49,31 @@ namespace Teleport.Controllers
             var stockPositions = await _stockService.GetAllStockPositions();
 
             return View("Position", stockPositions);
+        }
+
+        public async Task<JsonResult> ImportMyExcelTransactions()
+        {
+            var data = await System.IO.File.ReadAllLinesAsync(@"/app/Database/test.txt");
+            var stockTransactionDtos = data.Select(d =>
+            {
+                var strings = d.Split();
+                var dateStrings = strings[0].Split('/');
+                return new StockTransactionDto
+                {
+                    Date = $"{dateStrings[2]}-{dateStrings[1]}-{dateStrings[0]}",
+                    Ticker = strings[1],
+                    Action = strings[2],
+                    Quantity = Convert.ToDecimal(strings[3]),
+                    Price = Convert.ToDecimal(strings[4])
+                };
+            });
+
+            foreach (var stockTransaction in stockTransactionDtos.Select(dto => dto.ToStockTransaction()))
+            {
+                await _stockService.UpsertStockTransactions(stockTransaction);
+            }
+
+            return new JsonResult("Done");
         }
     }
 }
