@@ -29,6 +29,7 @@ namespace Teleport.Services
 
             var stockPositions = ToStockPositions(stockTransactions);
 
+            // TODO: try to move this foreach to ToStockPositions method
             foreach (var stockPosition in stockPositions)
             {
                 await GetRealTimeStockPosition(stockPosition);
