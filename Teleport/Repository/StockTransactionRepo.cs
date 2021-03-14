@@ -32,5 +32,15 @@ namespace Teleport.Repository
         {
             System.IO.File.Delete(FilePath);
         }
+
+        public async Task UpsertStockTransaction(StockTransaction stockTransaction)
+        {
+            var stockTransactions = (await GetAllStockTransactions()).ToList();
+
+            stockTransaction.Id = stockTransactions.Max(trx => trx.Id) + 1;
+            stockTransactions.Add(stockTransaction);
+
+            await UpsertStockTransactions(stockTransactions);
+        }
     }
 }

@@ -27,14 +27,13 @@ namespace Teleport.Controllers
         }
 
         [HttpPost]
-        public async Task<ViewResult> AddStockTransaction(StockTransactionDto stockTransactionDto)
+        public async Task<RedirectToActionResult> AddStockTransaction(StockTransactionDto stockTransactionDto)
         {
             var stockTransaction = stockTransactionDto.ToStockTransaction();
-            var stockTransactions = await _stockService.UpsertStockTransaction(stockTransaction);
 
-            var stockTransactionDtos = stockTransactions.Select(trx => trx.ToStockTransactionDto());
+            await _stockService.UpsertStockTransaction(stockTransaction);
 
-            return View("History", stockTransactionDtos);
+            return RedirectToAction("History");
         }
 
         [HttpGet]

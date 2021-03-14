@@ -8,7 +8,7 @@ namespace Teleport.Services
     {
         Task<IEnumerable<StockPosition>> GetAllStockPositions();
 
-        Task<List<StockTransaction>> UpsertStockTransaction(StockTransaction stockTransaction);
+        Task UpsertStockTransaction(StockTransaction stockTransaction);
 
         Task<IEnumerable<StockTransaction>> GetAllStockTransactions();
 

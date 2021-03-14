@@ -54,16 +54,9 @@ namespace Teleport.Services
             return stockPositions;
         }
 
-        public async Task<List<StockTransaction>> UpsertStockTransaction(StockTransaction stockTransaction)
+        public async Task UpsertStockTransaction(StockTransaction stockTransaction)
         {
-            var stockTransactions = (await GetAllStockTransactions()).ToList();
-
-            stockTransaction.Id = stockTransactions.Max(trx => trx.Id) + 1;
-            stockTransactions.Add(stockTransaction);
-
-            await UpsertAllStockTransactions(stockTransactions);
-
-            return stockTransactions;
+            await _stockTransactionRepo.UpsertStockTransaction(stockTransaction);
         }
 
         public async Task<IEnumerable<StockTransaction>> GetAllStockTransactions()

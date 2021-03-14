@@ -9,5 +9,6 @@ namespace Teleport.Repository
         Task<IEnumerable<StockTransaction>> GetAllStockTransactions();
         Task UpsertStockTransactions(IEnumerable<StockTransaction> stockTransactions);
         void DeleteAllHistoryTransactions();
+        Task UpsertStockTransaction(StockTransaction stockTransaction);
     }
 }
