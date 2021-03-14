@@ -146,6 +146,39 @@ namespace Teleport.UnitTests.Service
             });
         }
 
+        [Test]
+        public async Task should_not_show_in_position_when_stock_shares_is_zero()
+        {
+            GiveStockInfo("AAPL", 200m, 0.0526m, 10m);
+            GiveStockInfo("TSLA", 500m, -0.1667m, -100m);
+            GivenAllStockTransaction(
+                new StockTransaction { Ticker = "AAPL", Action = StockAction.Buy, Quantity = 1, Price = 200m, },
+                new StockTransaction { Ticker = "AAPL", Action = StockAction.Buy, Quantity = 1, Price = 150m, },
+                new StockTransaction { Ticker = "AAPL", Action = StockAction.Buy, Quantity = 2, Price = 180m, },
+                new StockTransaction { Ticker = "TSLA", Action = StockAction.Buy, Quantity = 1, Price = 700m, },
+                new StockTransaction { Ticker = "TSLA", Action = StockAction.Sell, Quantity = 1, Price = 600m, }
+                );
+
+            var stockPositions = await _stockService.GetAllStockPositions();
+
+            stockPositions.Should().BeEquivalentTo(new List<StockPosition>()
+            {
+                new StockPosition()
+                {
+                    Ticker = "AAPL",
+                    Shares = 4,
+                    AveragePurchasePrice = 177.5m,
+                    CurrentPrice = 200m,
+                    PercentageOfChange = 0.0526m,
+                    Change = 10m,
+                    Cost = 710m,
+                    CurrentValue = 800m,
+                    PercentageOfGain = 0.1268m,
+                    Gain = 22.5m * 4
+                }
+            });
+        }
+
         private void GivenAllStockTransaction(params StockTransaction[] transactions)
         {
             _stockTransactionRepo.GetAllStockTransactions().Returns(Task.FromResult((IEnumerable<StockTransaction>) transactions));
