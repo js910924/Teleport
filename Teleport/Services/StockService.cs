@@ -12,11 +12,13 @@ namespace Teleport.Services
     {
         private readonly IStockProxy _stockProxy;
         private readonly IStockTransactionRepo _stockTransactionRepo;
+        private readonly IStockInfoRepo _stockInfoRepo;
 
-        public StockService(IStockProxy stockProxy, IStockTransactionRepo stockTransactionRepo)
+        public StockService(IStockProxy stockProxy, IStockTransactionRepo stockTransactionRepo, IStockInfoRepo stockInfoRepo)
         {
             _stockProxy = stockProxy;
             _stockTransactionRepo = stockTransactionRepo;
+            _stockInfoRepo = stockInfoRepo;
         }
 
         public async Task<IEnumerable<StockPosition>> GetAllStockPositions()
@@ -44,9 +46,10 @@ namespace Teleport.Services
                         };
                     }).ToList();
 
-            var tasks = Enumerable.Empty<Task>().ToList();
-            tasks.AddRange(stockPositions.Select(position => GetRealTimeStockPosition(position)));
-            Task.WaitAll(tasks.ToArray());
+            foreach (var stockPosition in stockPositions)
+            {
+                await GetRealTimeStockPosition(stockPosition);
+            }
 
             return stockPositions;
         }
@@ -74,7 +77,12 @@ namespace Teleport.Services
 
         private async Task GetRealTimeStockPosition(StockPosition position)
         {
-            var stockInfo = await _stockProxy.GetStockInfo(position.Ticker);
+            var stockInfo = await _stockInfoRepo.GetStockInfo(position.Ticker);
+            if (stockInfo.Symbol != position.Ticker)
+            {
+                stockInfo = await _stockProxy.GetStockInfo(position.Ticker);
+                await _stockInfoRepo.UpsertStockInfo(stockInfo);
+            }
 
             var currentValue = stockInfo.Price * position.Shares;
             var gain = currentValue - position.Cost;

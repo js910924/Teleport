@@ -46,6 +46,7 @@ namespace Teleport
         private static void ConfigureRepo(IServiceCollection services)
         {
             services.AddTransient<IStockTransactionRepo, StockTransactionRepo>();
+            services.AddTransient<IStockInfoRepo, StockInfoRepo>();
         }
 
         private static void ConfigureSchedulers(IServiceCollection services)
