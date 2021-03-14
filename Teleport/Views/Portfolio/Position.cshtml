@@ -38,8 +38,8 @@
                 <td style="color: red">@dto.PercentageOfChange.ToString("P2")</td>
                 <td style="color: red">$@dto.Change.ToString("F2")</td>
             }
-            <td>$@dto.Cost</td>
-            <td>$@dto.CurrentValue</td>
+            <td>$@dto.Cost.ToString("F2")</td>
+            <td>$@dto.CurrentValue.ToString("F2")</td>
             @if (dto.Gain >= 0)
             {
                 <td style="color: green">@dto.PercentageOfGain.ToString("P2")</td>
