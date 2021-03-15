@@ -67,7 +67,7 @@ namespace Teleport.Services
                     {
                         Ticker = group.Key,
                         Shares = shares,
-                        AveragePurchasePrice = Math.Round(cost / shares, 2),
+                        AveragePrice = Math.Round(cost / shares, 2),
                         Cost = cost,
                     };
                 }).ToList();

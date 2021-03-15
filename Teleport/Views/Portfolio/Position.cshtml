@@ -10,7 +10,7 @@
     <tr>
         <th scope="col">Ticker</th>
         <th scope="col">Shares</th>
-        <th scope="col">AveragePurchasePrice</th>
+        <th scope="col">AveragePrice</th>
         <th scope="col">CurrentPrice</th>
         <th scope="col">Change %</th>
         <th scope="col">Change $</th>
@@ -26,7 +26,7 @@
         <tr>
             <td>@dto.Ticker</td>
             <td>@dto.Shares</td>
-            <td>$@dto.AveragePurchasePrice.ToString("F2")</td>
+            <td>$@dto.AveragePrice.ToString("F2")</td>
             <td>$@dto.CurrentPrice.ToString("F2")</td>
             @if (dto.Change >= 0)
             {

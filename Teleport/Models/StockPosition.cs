@@ -4,7 +4,7 @@
     {
         public string Ticker { get; set; }
         public int Shares { get; set; }
-        public decimal AveragePurchasePrice { get; set; }
+        public decimal AveragePrice { get; set; }
         public decimal CurrentPrice { get; set; }
         public decimal PercentageOfChange { get; set; }
         public decimal Change { get; set; }

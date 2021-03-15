@@ -46,7 +46,7 @@ namespace Teleport.UnitTests.Service
                 {
                     Ticker = "AAPL",
                     Shares = 1,
-                    AveragePurchasePrice = 190m,
+                    AveragePrice = 190m,
                     CurrentPrice = 200m,
                     PercentageOfChange = 0.0526m,
                     Change = 10m,
@@ -59,7 +59,7 @@ namespace Teleport.UnitTests.Service
         }
 
         [Test]
-        public async Task should_convert_all_history_stock_transactions_to_stock_position_with_average_purchase_price()
+        public async Task should_convert_all_history_stock_transactions_to_stock_position_with_average_price()
         {
             GiveStockInfoFromProxy(new StockInfo() { Symbol = "AAPL", Price = 200m, PercentageOfChange = 0.0526m, Change = 10m });
             GiveStockInfoFromProxy(new StockInfo() { Symbol = "TSLA", Price = 500m, PercentageOfChange = -0.1667m, Change = -100m });
@@ -79,7 +79,7 @@ namespace Teleport.UnitTests.Service
                 {
                     Ticker = "AAPL",
                     Shares = 4,
-                    AveragePurchasePrice = 177.5m,
+                    AveragePrice = 177.5m,
                     CurrentPrice = 200m,
                     PercentageOfChange = 0.0526m,
                     Change = 10m,
@@ -92,7 +92,7 @@ namespace Teleport.UnitTests.Service
                 {
                     Ticker = "TSLA",
                     Shares = 2,
-                    AveragePurchasePrice = 650m,
+                    AveragePrice = 650m,
                     CurrentPrice = 500m,
                     PercentageOfChange = -0.1667m,
                     Change = -100m,
@@ -128,7 +128,7 @@ namespace Teleport.UnitTests.Service
                 {
                     Ticker = "AAPL",
                     Shares = 4,
-                    AveragePurchasePrice = 177.5m,
+                    AveragePrice = 177.5m,
                     CurrentPrice = 200m,
                     PercentageOfChange = 0.0526m,
                     Change = 10m,
@@ -141,7 +141,7 @@ namespace Teleport.UnitTests.Service
                 {
                     Ticker = "TSLA",
                     Shares = 2,
-                    AveragePurchasePrice = 650m,
+                    AveragePrice = 650m,
                     CurrentPrice = 500m,
                     PercentageOfChange = -0.1667m,
                     Change = -100m,
@@ -175,7 +175,7 @@ namespace Teleport.UnitTests.Service
                 {
                     Ticker = "AAPL",
                     Shares = 4,
-                    AveragePurchasePrice = 177.5m,
+                    AveragePrice = 177.5m,
                     CurrentPrice = 200m,
                     PercentageOfChange = 0.0526m,
                     Change = 10m,
