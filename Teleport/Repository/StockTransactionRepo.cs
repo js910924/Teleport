@@ -51,5 +51,19 @@ namespace Teleport.Repository
 
             await UpsertStockTransactions(transactions);
         }
+
+        public async Task DeleteAllTransactionsBy(int customerId)
+        {
+            var stockTransactions = await GetAllStockTransactions();
+
+            var transactions = stockTransactions.Where(trx => trx.CustomerId != customerId);
+
+            await UpsertStockTransactions(transactions);
+        }
+
+        public async Task<IEnumerable<StockTransaction>> GetStockTransactionsBy(int customerId)
+        {
+            return (await GetAllStockTransactions()).Where(trx => trx.CustomerId == customerId);
+        }
     }
 }

@@ -32,7 +32,12 @@ namespace Teleport.Services
 
         public async Task<IEnumerable<StockTransaction>> GetStockTransactionsBy(int customerId)
         {
-            return (await GetAllStockTransactions()).Where(trx => trx.CustomerId == customerId);
+            return await _stockTransactionRepo.GetStockTransactionsBy(customerId);
+        }
+
+        public async Task DeleteAllTransactionsBy(int customerId)
+        {
+            await _stockTransactionRepo.DeleteAllTransactionsBy(customerId);
         }
     }
 }

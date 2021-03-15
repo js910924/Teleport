@@ -41,11 +41,11 @@ namespace Teleport.Controllers
         }
 
         [HttpGet]
-        public RedirectToActionResult DeleteAllHistoryTransactions()
+        public async Task<RedirectToActionResult> DeleteAllHistoryTransactions(int customerId)
         {
-            _stockService.DeleteAllTransactions();
+            await _stockTransactionService.DeleteAllTransactionsBy(customerId);
 
-            return RedirectToAction("History");
+            return RedirectToAction("History", customerId);
         }
 
         [HttpGet]

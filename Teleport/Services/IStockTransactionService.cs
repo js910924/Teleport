@@ -10,5 +10,6 @@ namespace Teleport.Services
         Task DeleteTransaction(int transactionId);
         Task<IEnumerable<StockTransaction>> GetAllStockTransactions();
         Task<IEnumerable<StockTransaction>> GetStockTransactionsBy(int customerId);
+        Task DeleteAllTransactionsBy(int customerId);
     }
 }
