@@ -26,24 +26,6 @@ namespace Teleport.Controllers
             return View("History", stockTransactionDtos);
         }
 
-        [HttpPost]
-        public async Task<RedirectToActionResult> AddStockTransaction(StockTransactionDto stockTransactionDto)
-        {
-            var stockTransaction = stockTransactionDto.ToStockTransaction();
-
-            await _stockService.UpsertStockTransaction(stockTransaction);
-
-            return RedirectToAction("History");
-        }
-
-        [HttpGet]
-        public async Task<RedirectToActionResult> DeleteStockTransaction(int transactionId)
-        {
-            await _stockService.DeleteStockTransaction(transactionId);
-
-            return RedirectToAction("History");
-        }
-
         [HttpGet]
         public RedirectToActionResult DeleteAllHistoryTransactions()
         {
