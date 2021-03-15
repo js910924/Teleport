@@ -16,19 +16,19 @@ namespace Teleport.UnitTests.Service
     {
         private IStockProxy _stockProxy;
         private StockService _stockService;
-        private IStockTransactionRepo _stockTransactionRepo;
         private IStockInfoRepo _stockInfoRepo;
         private IStockMarketChecker _stockMarketChecker;
+        private IStockTransactionService _stockTransactionService;
 
         [SetUp]
         public void SetUp()
         {
             _stockProxy = Substitute.For<IStockProxy>();
-            _stockTransactionRepo = Substitute.For<IStockTransactionRepo>();
             _stockInfoRepo = Substitute.For<IStockInfoRepo>();
             _stockMarketChecker = Substitute.For<IStockMarketChecker>();
+            _stockTransactionService = Substitute.For<IStockTransactionService>();
 
-            _stockService = new StockService(_stockProxy, _stockTransactionRepo, _stockInfoRepo, _stockMarketChecker);
+            _stockService = new StockService(_stockProxy, _stockInfoRepo, _stockMarketChecker, _stockTransactionService);
         }
 
         [Test]
@@ -377,7 +377,7 @@ namespace Teleport.UnitTests.Service
 
         private void GivenAllStockTransaction(params StockTransaction[] transactions)
         {
-            _stockTransactionRepo.GetAllStockTransactions().Returns(Task.FromResult((IEnumerable<StockTransaction>)transactions));
+            _stockTransactionService.GetAllStockTransactions().Returns(Task.FromResult((IEnumerable<StockTransaction>)transactions));
         }
 
         private void GiveStockInfoFromProxy(StockInfo stockInfo)

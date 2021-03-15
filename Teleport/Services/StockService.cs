@@ -11,15 +11,13 @@ namespace Teleport.Services
     public class StockService : IStockService
     {
         private readonly IStockProxy _stockProxy;
-        private readonly IStockTransactionRepo _stockTransactionRepo;
         private readonly IStockInfoRepo _stockInfoRepo;
         private readonly IStockMarketChecker _stockMarketChecker;
         private readonly IStockTransactionService _stockTransactionService;
 
-        public StockService(IStockProxy stockProxy, IStockTransactionRepo stockTransactionRepo, IStockInfoRepo stockInfoRepo, IStockMarketChecker stockMarketChecker, IStockTransactionService stockTransactionService)
+        public StockService(IStockProxy stockProxy, IStockInfoRepo stockInfoRepo, IStockMarketChecker stockMarketChecker, IStockTransactionService stockTransactionService)
         {
             _stockProxy = stockProxy;
-            _stockTransactionRepo = stockTransactionRepo;
             _stockInfoRepo = stockInfoRepo;
             _stockMarketChecker = stockMarketChecker;
             _stockTransactionService = stockTransactionService;
