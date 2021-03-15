@@ -4,6 +4,7 @@ namespace Teleport.Models
 {
     public class StockTransactionDto
     {
+        public int Id { get; set; }
         public string Date { get; set; }
         public string Ticker { get; set; }
         public string Action { get; set; }
@@ -15,6 +16,7 @@ namespace Teleport.Models
         {
             return new()
             {
+                Id = Id,
                 Date = Convert.ToDateTime(Date),
                 Ticker = Ticker.ToUpper(),
                 Action = Enum.Parse<StockAction>(Action),

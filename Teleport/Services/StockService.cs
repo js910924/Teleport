@@ -58,6 +58,11 @@ namespace Teleport.Services
             await _stockTransactionRepo.UpsertStockTransactions(stockTransactions);
         }
 
+        public async Task RemoveStockTransaction(int transactionId)
+        {
+            await _stockTransactionRepo.DeleteTransaction(transactionId);
+        }
+
         private static List<StockPosition> ToStockPositions(IEnumerable<StockTransaction> stockTransactions)
         {
             return stockTransactions

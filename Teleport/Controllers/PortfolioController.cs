@@ -37,6 +37,14 @@ namespace Teleport.Controllers
         }
 
         [HttpGet]
+        public async Task<RedirectToActionResult> RemoveStockTransaction(int transactionId)
+        {
+            await _stockService.RemoveStockTransaction(transactionId);
+
+            return RedirectToAction("History");
+        }
+
+        [HttpGet]
         public RedirectToActionResult DeleteAllHistoryTransactions()
         {
             _stockService.DeleteAllTransactions();
@@ -54,7 +62,7 @@ namespace Teleport.Controllers
 
         public async Task<RedirectToActionResult> ImportMyExcelTransactions()
         {
-            var data = await System.IO.File.ReadAllLinesAsync(@"/app/Database/test.txt");
+            var data = await System.IO.File.ReadAllLinesAsync(@"/app/Database/realTransactions.txt");
             var stockTransactionDtos = data.Select(d =>
             {
                 var strings = d.Split();

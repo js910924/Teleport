@@ -17,6 +17,7 @@ namespace Teleport.Models
         {
             return new()
             {
+                Id = Id,
                 Date = Date.ToString("MM/dd/yyyy"),
                 Ticker = Ticker,
                 Action = Action.ToString(),
