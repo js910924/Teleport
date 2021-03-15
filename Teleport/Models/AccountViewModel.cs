@@ -1,14 +1,12 @@
-﻿using Teleport.Controllers;
-
-namespace Teleport.Models
+﻿namespace Teleport.Models
 {
-    public class SignUpViewModel
+    public class AccountViewModel
     {
         public string Account { get; set; }
         public string Password { get; set; }
         public string ErrorMessage { get; set; }
 
-        public SignUpInfo ToSignUpInfo()
+        public AccountInfo ToAccountInfo()
         {
             return new()
             {

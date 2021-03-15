@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
@@ -18,11 +17,11 @@ namespace Teleport.Controllers
         [HttpGet]
         public ViewResult SignUp()
         {
-            return View("SignUp", new SignUpViewModel());
+            return View("SignUp", new AccountViewModel());
         }
 
         [HttpPost]
-        public async Task<ViewResult> SignUp(SignUpViewModel model)
+        public async Task<ViewResult> SignUp(AccountViewModel model)
         {
             if (System.IO.File.Exists($@"{DirectoryPath}{model.Account}.json"))
             {
@@ -30,9 +29,9 @@ namespace Teleport.Controllers
                 return View("SignUp", model);
             }
 
-            var signUpInfo = model.ToSignUpInfo();
-            signUpInfo.CustomerId = GetTotalCustomerAmount() + 1;
-            await System.IO.File.WriteAllTextAsync($@"{DirectoryPath}{model.Account}.json", JsonConvert.SerializeObject(signUpInfo));
+            var accountInfo = model.ToAccountInfo();
+            accountInfo.CustomerId = GetTotalCustomerAmount() + 1;
+            await System.IO.File.WriteAllTextAsync($@"{DirectoryPath}{model.Account}.json", JsonConvert.SerializeObject(accountInfo));
 
             return View("SignIn", model);
         }
@@ -40,11 +39,11 @@ namespace Teleport.Controllers
         [HttpGet]
         public ViewResult SignIn()
         {
-            return View("SignIn", new SignUpViewModel());
+            return View("SignIn", new AccountViewModel());
         }
 
         [HttpPost]
-        public async Task<IActionResult> SignIn(SignUpViewModel model)
+        public async Task<IActionResult> SignIn(AccountViewModel model)
         {
             if (!System.IO.File.Exists($@"{DirectoryPath}{model.Account}.json"))
             {
@@ -53,14 +52,14 @@ namespace Teleport.Controllers
             }
 
             var json = await System.IO.File.ReadAllTextAsync($@"{DirectoryPath}{model.Account}.json");
-            var signUpInfo = JsonConvert.DeserializeObject<SignUpInfo>(json);
-            if (signUpInfo.Account != model.Account || signUpInfo.Password != model.Password)
+            var accountInfo = JsonConvert.DeserializeObject<AccountInfo>(json);
+            if (accountInfo.Account != model.Account || accountInfo.Password != model.Password)
             {
                 model.ErrorMessage = "account or password is invalid";
                 return RedirectToAction("SignUp", model);
             }
 
-            var claims = new[] { new Claim("CustomerId", signUpInfo.CustomerId.ToString()) };
+            var claims = new[] { new Claim("CustomerId", accountInfo.CustomerId.ToString()) };
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(claimsIdentity);
 

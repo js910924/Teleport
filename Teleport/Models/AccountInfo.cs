@@ -1,6 +1,6 @@
 ﻿namespace Teleport.Models
 {
-    public class SignUpInfo
+    public class AccountInfo
     {
         public string Account { get; set; }
         public string Password { get; set; }
