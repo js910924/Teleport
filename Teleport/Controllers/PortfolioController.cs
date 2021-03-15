@@ -44,6 +44,7 @@ namespace Teleport.Controllers
             return View("Position", stockPositions);
         }
 
+        [HttpGet]
         public async Task<RedirectToActionResult> ImportMyExcelTransactions()
         {
             var data = await System.IO.File.ReadAllLinesAsync(@"/app/Database/realTransactions.txt");
