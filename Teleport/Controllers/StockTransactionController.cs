@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Teleport.Extention;
 using Teleport.Models;
 using Teleport.Services;
 
@@ -17,8 +18,9 @@ namespace Teleport.Controllers
         }
 
         [HttpPost]
-        public async Task<RedirectToActionResult> AddStockTransaction(StockTransactionDto stockTransactionDto, int customerId)
+        public async Task<RedirectToActionResult> AddStockTransaction(StockTransactionDto stockTransactionDto)
         {
+            var customerId = User.GetCustomerId();
             var stockTransaction = stockTransactionDto.ToStockTransaction();
             stockTransaction.CustomerId = customerId;
 
