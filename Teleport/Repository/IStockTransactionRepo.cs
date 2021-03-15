@@ -12,6 +12,6 @@ namespace Teleport.Repository
         Task UpsertStockTransaction(StockTransaction stockTransaction);
         Task DeleteTransaction(int transactionId);
         Task DeleteAllTransactionsBy(int customerId);
-        async Task<IEnumerable<StockTransaction>> GetStockTransactionsBy(int customerId);
+        Task<IEnumerable<StockTransaction>> GetStockTransactionsBy(int customerId);
     }
 }

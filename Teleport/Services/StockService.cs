@@ -45,11 +45,6 @@ namespace Teleport.Services
             _stockTransactionRepo.DeleteAllHistoryTransactions();
         }
 
-        public async Task UpsertAllStockTransactions(IEnumerable<StockTransaction> stockTransactions)
-        {
-            await _stockTransactionRepo.UpsertStockTransactions(stockTransactions);
-        }
-
         private static List<StockPosition> ToStockPositions(IEnumerable<StockTransaction> stockTransactions)
         {
             return stockTransactions

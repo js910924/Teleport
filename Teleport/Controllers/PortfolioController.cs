@@ -3,6 +3,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Teleport.Models;
+using Teleport.Repository;
 using Teleport.Services;
 
 namespace Teleport.Controllers
@@ -11,11 +12,13 @@ namespace Teleport.Controllers
     {
         private readonly IStockService _stockService;
         private readonly IStockTransactionService _stockTransactionService;
+        private readonly IStockTransactionRepo _stockTransactionRepo;
 
-        public PortfolioController(IStockService stockService, IStockTransactionService stockTransactionService)
+        public PortfolioController(IStockService stockService, IStockTransactionService stockTransactionService, IStockTransactionRepo stockTransactionRepo)
         {
             _stockService = stockService;
             _stockTransactionService = stockTransactionService;
+            _stockTransactionRepo = stockTransactionRepo;
         }
 
         [HttpGet]
@@ -83,7 +86,7 @@ namespace Teleport.Controllers
                 return transaction;
             });
 
-            await _stockService.UpsertAllStockTransactions(stockTransactions);
+            await _stockTransactionRepo.UpsertStockTransactions(stockTransactions);
 
             return RedirectToAction("History");
         }
