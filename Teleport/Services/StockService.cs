@@ -58,7 +58,7 @@ namespace Teleport.Services
             await _stockTransactionRepo.UpsertStockTransactions(stockTransactions);
         }
 
-        public async Task RemoveStockTransaction(int transactionId)
+        public async Task DeleteStockTransaction(int transactionId)
         {
             await _stockTransactionRepo.DeleteTransaction(transactionId);
         }

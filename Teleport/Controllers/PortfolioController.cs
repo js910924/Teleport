@@ -37,9 +37,9 @@ namespace Teleport.Controllers
         }
 
         [HttpGet]
-        public async Task<RedirectToActionResult> RemoveStockTransaction(int transactionId)
+        public async Task<RedirectToActionResult> DeleteStockTransaction(int transactionId)
         {
-            await _stockService.RemoveStockTransaction(transactionId);
+            await _stockService.DeleteStockTransaction(transactionId);
 
             return RedirectToAction("History");
         }
