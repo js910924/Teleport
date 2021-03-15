@@ -40,11 +40,6 @@ namespace Teleport.Services
             return stockPositions;
         }
 
-        public void DeleteAllTransactions()
-        {
-            _stockTransactionRepo.DeleteAllHistoryTransactions();
-        }
-
         private static List<StockPosition> ToStockPositions(IEnumerable<StockTransaction> stockTransactions)
         {
             return stockTransactions
