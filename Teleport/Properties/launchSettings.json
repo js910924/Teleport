@@ -27,7 +27,7 @@
     "Docker": {
       "commandName": "Docker",
       "launchBrowser": true,
-      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/Account/SignUp",
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/Account/SignIn",
       "publishAllPorts": true,
       "useSSL": true
     }

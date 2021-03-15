@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
@@ -59,14 +60,14 @@ namespace Teleport.Controllers
                 return RedirectToAction("SignUp", model);
             }
 
-            var claims = new[] { new Claim("Account", model.Account) };
+            var claims = new[] { new Claim("CustomerId", signUpInfo.CustomerId.ToString()) };
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(claimsIdentity);
 
             await HttpContext.SignInAsync(principal,
                 new AuthenticationProperties()
                 {
-                    //IsPersistent = false, // logout when close browser
+                    IsPersistent = false, // logout when close browser
                     ExpiresUtc = DateTime.Now.AddMinutes(60)    // default is 14 days
                 });
 

@@ -38,6 +38,7 @@ namespace Teleport
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(option =>
             {
+                option.Cookie.Name = "_auth";
                 option.LoginPath = new PathString("/Account/SignIn");
                 option.LogoutPath = new PathString("/Account/SignIn");
                 option.ExpireTimeSpan = TimeSpan.FromMinutes(60);   // default is 14 days
