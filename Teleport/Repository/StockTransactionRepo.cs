@@ -28,11 +28,6 @@ namespace Teleport.Repository
             await System.IO.File.WriteAllTextAsync(FilePath, json);
         }
 
-        public void DeleteAllHistoryTransactions()
-        {
-            System.IO.File.Delete(FilePath);
-        }
-
         public async Task UpsertStockTransaction(StockTransaction stockTransaction)
         {
             var stockTransactions = (await GetAllStockTransactions()).ToList();
