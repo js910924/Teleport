@@ -43,6 +43,7 @@ namespace Teleport
             services.AddTransient<IPttService, PttService>();
             services.AddTransient<IStockService, StockService>();
             services.AddTransient<IStockMarketChecker, StockMarketChecker>();
+            services.AddTransient<IStockTransactionService, StockTransactionService>();
         }
 
         private static void ConfigureRepo(IServiceCollection services)

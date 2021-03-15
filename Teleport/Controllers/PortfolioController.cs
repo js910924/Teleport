@@ -10,16 +10,18 @@ namespace Teleport.Controllers
     public class PortfolioController : Controller
     {
         private readonly IStockService _stockService;
+        private readonly IStockTransactionService _stockTransactionService;
 
-        public PortfolioController(IStockService stockService)
+        public PortfolioController(IStockService stockService, IStockTransactionService stockTransactionService)
         {
             _stockService = stockService;
+            _stockTransactionService = stockTransactionService;
         }
 
         [HttpGet]
         public async Task<ViewResult> History()
         {
-            var stockTransactions = await _stockService.GetAllStockTransactions();
+            var stockTransactions = await _stockTransactionService.GetAllStockTransactions();
 
             var stockTransactionDtos = stockTransactions.Select(trx => trx.ToStockTransactionDto());
 

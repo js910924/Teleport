@@ -14,18 +14,20 @@ namespace Teleport.Services
         private readonly IStockTransactionRepo _stockTransactionRepo;
         private readonly IStockInfoRepo _stockInfoRepo;
         private readonly IStockMarketChecker _stockMarketChecker;
+        private readonly IStockTransactionService _stockTransactionService;
 
-        public StockService(IStockProxy stockProxy, IStockTransactionRepo stockTransactionRepo, IStockInfoRepo stockInfoRepo, IStockMarketChecker stockMarketChecker)
+        public StockService(IStockProxy stockProxy, IStockTransactionRepo stockTransactionRepo, IStockInfoRepo stockInfoRepo, IStockMarketChecker stockMarketChecker, IStockTransactionService stockTransactionService)
         {
             _stockProxy = stockProxy;
             _stockTransactionRepo = stockTransactionRepo;
             _stockInfoRepo = stockInfoRepo;
             _stockMarketChecker = stockMarketChecker;
+            _stockTransactionService = stockTransactionService;
         }
 
         public async Task<IEnumerable<StockPosition>> GetAllStockPositions()
         {
-            var stockTransactions = await GetAllStockTransactions();
+            var stockTransactions = await _stockTransactionService.GetAllStockTransactions();
 
             var stockPositions = ToStockPositions(stockTransactions);
 
@@ -38,16 +40,6 @@ namespace Teleport.Services
             return stockPositions;
         }
 
-        public async Task UpsertStockTransaction(StockTransaction stockTransaction)
-        {
-            await _stockTransactionRepo.UpsertStockTransaction(stockTransaction);
-        }
-
-        public async Task<IEnumerable<StockTransaction>> GetAllStockTransactions()
-        {
-            return await _stockTransactionRepo.GetAllStockTransactions();
-        }
-
         public void DeleteAllTransactions()
         {
             _stockTransactionRepo.DeleteAllHistoryTransactions();
@@ -56,11 +48,6 @@ namespace Teleport.Services
         public async Task UpsertAllStockTransactions(IEnumerable<StockTransaction> stockTransactions)
         {
             await _stockTransactionRepo.UpsertStockTransactions(stockTransactions);
-        }
-
-        public async Task DeleteStockTransaction(int transactionId)
-        {
-            await _stockTransactionRepo.DeleteTransaction(transactionId);
         }
 
         private static List<StockPosition> ToStockPositions(IEnumerable<StockTransaction> stockTransactions)

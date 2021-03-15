@@ -7,11 +7,11 @@ namespace Teleport.Controllers
 {
     public class StockTransactionController : Controller
     {
-        private readonly IStockService _stockService;
+        private readonly IStockTransactionService _stockTransactionService;
 
-        public StockTransactionController(IStockService stockService)
+        public StockTransactionController(IStockTransactionService stockTransactionService)
         {
-            _stockService = stockService;
+            _stockTransactionService = stockTransactionService;
         }
 
         [HttpPost]
@@ -19,7 +19,7 @@ namespace Teleport.Controllers
         {
             var stockTransaction = stockTransactionDto.ToStockTransaction();
 
-            await _stockService.UpsertStockTransaction(stockTransaction);
+            await _stockTransactionService.UpsertStockTransaction(stockTransaction);
 
             return RedirectToAction("History", "Portfolio");
         }
@@ -27,7 +27,7 @@ namespace Teleport.Controllers
         [HttpGet]
         public async Task<RedirectToActionResult> DeleteStockTransaction(int transactionId)
         {
-            await _stockService.DeleteStockTransaction(transactionId);
+            await _stockTransactionService.DeleteTransaction(transactionId);
 
             return RedirectToAction("History", "Portfolio");
         }
