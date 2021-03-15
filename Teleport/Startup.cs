@@ -1,6 +1,8 @@
 using System;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -33,6 +35,13 @@ namespace Teleport
             ConfigureService(services);
             ConfigureRepo(services);
             services.AddTransient<IStockProxy, StockProxy>();
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(option =>
+            {
+                option.LoginPath = new PathString("/Account/SignIn");
+                option.LogoutPath = new PathString("/Account/SignIn");
+                option.ExpireTimeSpan = TimeSpan.FromMinutes(60);   // default is 14 days
+            });
 
             //ConfigureSchedulers(services);
         }
@@ -107,6 +116,7 @@ namespace Teleport
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

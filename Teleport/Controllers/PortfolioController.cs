@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Teleport.Models;
 using Teleport.Repository;
@@ -8,6 +9,7 @@ using Teleport.Services;
 
 namespace Teleport.Controllers
 {
+    [Authorize]
     public class PortfolioController : Controller
     {
         private readonly IStockService _stockService;

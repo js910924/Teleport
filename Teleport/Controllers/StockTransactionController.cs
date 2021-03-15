@@ -1,10 +1,12 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Teleport.Models;
 using Teleport.Services;
 
 namespace Teleport.Controllers
 {
+    [Authorize]
     public class StockTransactionController : Controller
     {
         private readonly IStockTransactionService _stockTransactionService;
