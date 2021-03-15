@@ -3,6 +3,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Teleport.Extention;
 using Teleport.Models;
 using Teleport.Repository;
 using Teleport.Services;
@@ -24,8 +25,9 @@ namespace Teleport.Controllers
         }
 
         [HttpGet]
-        public async Task<ViewResult> History(int customerId)
+        public async Task<ViewResult> History()
         {
+            var customerId = User.GetCustomerId();
             var stockTransactions = await _stockTransactionService.GetStockTransactionsBy(customerId);
 
             var stockTransactionDtos = stockTransactions.Select(trx => trx.ToStockTransactionDto());
@@ -45,13 +47,13 @@ namespace Teleport.Controllers
             return View("History", viewModel);
         }
 
-        [AllowAnonymous]
         [HttpGet]
-        public async Task<RedirectToActionResult> DeleteAllHistoryTransactions(int customerId)
+        public async Task<RedirectToActionResult> DeleteAllHistoryTransactions()
         {
+            var customerId = User.GetCustomerId();
             await _stockTransactionService.DeleteAllTransactionsBy(customerId);
 
-            return RedirectToAction("History", customerId);
+            return RedirectToAction("History");
         }
 
         [HttpGet]

@@ -24,7 +24,7 @@ namespace Teleport.Controllers
 
             await _stockTransactionService.UpsertStockTransaction(stockTransaction);
 
-            return RedirectToAction("History", "Portfolio", customerId);
+            return RedirectToAction("History", "Portfolio");
         }
 
         [HttpGet]
