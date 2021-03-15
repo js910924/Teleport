@@ -10,42 +10,42 @@ namespace Teleport.Repository
 {
     internal class StockInfoRepo : IStockInfoRepo
     {
-        private const string FilePath = @"/app/Database/StockInfo.json";
+        private const string FilePathPrefix = @"/app/Database/StockInfo/";
 
         public async Task<StockInfo> GetStockInfo(string stockSymbol)
         {
-            var stockInfos = await GetAllStockInfo();
+            if (File.Exists($"{FilePathPrefix}{stockSymbol}.json"))
+            {
+                var json = await File.ReadAllTextAsync($"{FilePathPrefix}{stockSymbol}.json");
 
-            var stockInfo = stockInfos.FirstOrDefault(info => info.Symbol == stockSymbol);
+                return JsonConvert.DeserializeObject<StockInfo>(json);
+            }
 
-            return stockInfo ?? new StockInfo();
+            return new StockInfo();
         }
 
         public async Task UpsertStockInfo(StockInfo stockInfo)
         {
-            var stockInfos = (await GetAllStockInfo()).ToList();
+            stockInfo.CreatedOn = DateTime.Now;
 
-            var info = stockInfos.FirstOrDefault(i => i.Symbol == stockInfo.Symbol);
-            if (info != null)
+            var info = await GetStockInfo(stockInfo.Symbol);
+            if (info.Symbol == stockInfo.Symbol)
             {
                 stockInfo.CreatedOn = info.CreatedOn;
-                stockInfos.Remove(info);
             }
 
-            stockInfo.CreatedOn = DateTime.Now;
             stockInfo.ModifiedOn = DateTime.Now;
-            stockInfos.Add(stockInfo);
 
-            await File.WriteAllTextAsync(FilePath, JsonConvert.SerializeObject(stockInfos));
+            await File.WriteAllTextAsync($"{FilePathPrefix}{stockInfo.Symbol}.json", JsonConvert.SerializeObject(stockInfo));
         }
 
         private static async Task<IEnumerable<StockInfo>> GetAllStockInfo()
         {
             try
             {
-                if (File.Exists(FilePath))
+                if (File.Exists(FilePathPrefix))
                 {
-                    var json = await File.ReadAllTextAsync(FilePath);
+                    var json = await File.ReadAllTextAsync(FilePathPrefix);
 
                     return JsonConvert.DeserializeObject<IEnumerable<StockInfo>>(json);
                 }
