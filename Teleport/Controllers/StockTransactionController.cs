@@ -15,13 +15,14 @@ namespace Teleport.Controllers
         }
 
         [HttpPost]
-        public async Task<RedirectToActionResult> AddStockTransaction(StockTransactionDto stockTransactionDto)
+        public async Task<RedirectToActionResult> AddStockTransaction(StockTransactionDto stockTransactionDto, int customerId)
         {
             var stockTransaction = stockTransactionDto.ToStockTransaction();
+            stockTransaction.CustomerId = customerId;
 
             await _stockTransactionService.UpsertStockTransaction(stockTransaction);
 
-            return RedirectToAction("History", "Portfolio");
+            return RedirectToAction("History", "Portfolio", customerId);
         }
 
         [HttpGet]

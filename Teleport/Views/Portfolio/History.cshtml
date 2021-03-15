@@ -1,13 +1,8 @@
-﻿@model IEnumerable<StockTransactionDto>
+﻿@model StockHistoryViewModel
 
 @{
     ViewBag.Title = "History";
     Layout = "_Layout";
-
-    var stockActions = Enum.GetValues(typeof(StockAction))
-        .Cast<StockAction>()
-        .Select(action => action.ToString())
-        .ToList();
 }
 
 <form asp-controller="StockTransaction" asp-action="AddStockTransaction" method="post">
@@ -22,10 +17,10 @@
     <div class="form-group">
         <label for="Action">Action</label>
         <select class="form-control" id="Action" name="Action">
-            <option selected="" value="@stockActions[0]">@stockActions[0]</option>
-            @for (var i = 1; i < stockActions.Count(); i++)
+            <option selected="" value="@Model.StockActionDropDownList[0]">@Model.StockActionDropDownList[0]</option>
+            @for (var i = 1; i < Model.StockActionDropDownList.Count(); i++)
             {
-                <option value="@stockActions[i]">@stockActions[i]</option>
+                <option value="@Model.StockActionDropDownList[i]">@Model.StockActionDropDownList[i]</option>
             }
         </select>
     </div>
@@ -38,6 +33,7 @@
         <input class="form-control" type="number" step="0.01" id="Price" name="Price" value="" required="" />
     </div>
 
+    <input type="number" name="customerId" value="@Model.CustomerId" hidden/>
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 
@@ -54,7 +50,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var dto in Model)
+        @foreach (var dto in Model.TransactionDtos)
         {
             <tr>
                 <td>@dto.Date</td>

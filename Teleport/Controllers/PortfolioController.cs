@@ -19,13 +19,25 @@ namespace Teleport.Controllers
         }
 
         [HttpGet]
-        public async Task<ViewResult> History()
+        public async Task<ViewResult> History(int customerId)
         {
-            var stockTransactions = await _stockTransactionService.GetAllStockTransactions();
+            var stockTransactions = await _stockTransactionService.GetStockTransactionsBy(customerId);
 
             var stockTransactionDtos = stockTransactions.Select(trx => trx.ToStockTransactionDto());
 
-            return View("History", stockTransactionDtos);
+            var stockActions = Enum.GetValues(typeof(StockAction))
+                .Cast<StockAction>()
+                .Select(action => action.ToString())
+                .ToList();
+
+            var viewModel = new StockHistoryViewModel()
+            {
+                TransactionDtos = stockTransactionDtos.ToList(),
+                CustomerId = customerId,
+                StockActionDropDownList = stockActions
+            };
+
+            return View("History", viewModel);
         }
 
         [HttpGet]

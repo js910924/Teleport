@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Teleport.Models;
 using Teleport.Repository;
@@ -27,6 +28,11 @@ namespace Teleport.Services
         public async Task<IEnumerable<StockTransaction>> GetAllStockTransactions()
         {
             return await _stockTransactionRepo.GetAllStockTransactions();
+        }
+
+        public async Task<IEnumerable<StockTransaction>> GetStockTransactionsBy(int customerId)
+        {
+            return (await GetAllStockTransactions()).Where(trx => trx.CustomerId == customerId);
         }
     }
 }
