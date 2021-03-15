@@ -45,6 +45,7 @@ namespace Teleport.Controllers
             return View("History", viewModel);
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<RedirectToActionResult> DeleteAllHistoryTransactions(int customerId)
         {
@@ -61,6 +62,7 @@ namespace Teleport.Controllers
             return View("Position", stockPositions);
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<RedirectToActionResult> ImportMyExcelTransactions()
         {
