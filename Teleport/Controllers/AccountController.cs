@@ -70,7 +70,7 @@ namespace Teleport.Controllers
                     ExpiresUtc = DateTime.Now.AddMinutes(60)    // default is 14 days
                 });
 
-            return new JsonResult(signUpInfo);
+            return RedirectToAction("History", "Portfolio", new { signUpInfo.CustomerId });
         }
 
         [Authorize]
