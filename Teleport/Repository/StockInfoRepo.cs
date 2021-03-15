@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Teleport.Models;
@@ -37,25 +35,6 @@ namespace Teleport.Repository
             stockInfo.ModifiedOn = DateTime.Now;
 
             await File.WriteAllTextAsync($"{FilePathPrefix}{stockInfo.Symbol}.json", JsonConvert.SerializeObject(stockInfo));
-        }
-
-        private static async Task<IEnumerable<StockInfo>> GetAllStockInfo()
-        {
-            try
-            {
-                if (File.Exists(FilePathPrefix))
-                {
-                    var json = await File.ReadAllTextAsync(FilePathPrefix);
-
-                    return JsonConvert.DeserializeObject<IEnumerable<StockInfo>>(json);
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-
-            return Enumerable.Empty<StockInfo>();
         }
     }
 }

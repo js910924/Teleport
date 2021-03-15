@@ -32,10 +32,9 @@ namespace Teleport.Services
             var stockPositions = ToStockPositions(stockTransactions);
 
             // TODO: try to move this foreach to ToStockPositions method
-            foreach (var stockPosition in stockPositions)
-            {
-                await GetRealTimeStockPosition(stockPosition);
-            }
+            var tasks = Enumerable.Empty<Task>().ToList();
+            tasks.AddRange(stockPositions.Select(position => GetRealTimeStockPosition(position)));
+            Task.WaitAll(tasks.ToArray());
 
             return stockPositions;
         }
