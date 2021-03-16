@@ -5,53 +5,55 @@
     Layout = "_Layout";
 }
 
-<table class="table">
-    <thead>
-    <tr>
-        <th scope="col">Ticker</th>
-        <th scope="col">Shares</th>
-        <th scope="col">AveragePrice</th>
-        <th scope="col">CurrentPrice</th>
-        <th scope="col">Change %</th>
-        <th scope="col">Change $</th>
-        <th scope="col">Cost</th>
-        <th scope="col">CurrentValue</th>
-        <th scope="col">Gain %</th>
-        <th scope="col">Gain $</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var dto in Model)
-    {
+<div class="table-responsive">
+    <table class="table table-hover table-sm">
+        <thead class="thead-light">
         <tr>
-            <td>@dto.Ticker</td>
-            <td>@dto.Shares</td>
-            <td>$@dto.AveragePrice.ToString("F2")</td>
-            <td>$@dto.CurrentPrice.ToString("F2")</td>
-            @if (dto.Change >= 0)
-            {
-                <td style="color: green">@dto.PercentageOfChange.ToString("P2")</td>
-                <td style="color: green">$@dto.Change.ToString("F2")</td>
-            }
-            else
-            {
-                <td style="color: red">@dto.PercentageOfChange.ToString("P2")</td>
-                <td style="color: red">$@dto.Change.ToString("F2")</td>
-            }
-            <td>$@dto.Cost.ToString("F2")</td>
-            <td>$@dto.CurrentValue.ToString("F2")</td>
-            @if (dto.Gain >= 0)
-            {
-                <td style="color: green">@dto.PercentageOfGain.ToString("P2")</td>
-                <td style="color: green">$@dto.Gain.ToString("F2")</td>
-
-            }
-            else
-            {
-                <td style="color: red">@dto.PercentageOfGain.ToString("P2")</td>
-                <td style="color: red">$@dto.Gain.ToString("F2")</td>
-            }
+            <th scope="col">Ticker</th>
+            <th scope="col">Shares</th>
+            <th scope="col">AveragePrice</th>
+            <th scope="col">CurrentPrice</th>
+            <th scope="col">Change %</th>
+            <th scope="col">Change $</th>
+            <th scope="col">Cost</th>
+            <th scope="col">CurrentValue</th>
+            <th scope="col">Gain %</th>
+            <th scope="col">Gain $</th>
         </tr>
-    }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        @foreach (var dto in Model)
+        {
+            <tr>
+                <td>@dto.Ticker</td>
+                <td>@dto.Shares</td>
+                <td>$@dto.AveragePrice.ToString("F2")</td>
+                <td>$@dto.CurrentPrice.ToString("F2")</td>
+                @if (dto.Change >= 0)
+                {
+                    <td style="color: green">@dto.PercentageOfChange.ToString("P2")</td>
+                    <td style="color: green">$@dto.Change.ToString("F2")</td>
+                }
+                else
+                {
+                    <td style="color: red">@dto.PercentageOfChange.ToString("P2")</td>
+                    <td style="color: red">$@dto.Change.ToString("F2")</td>
+                }
+                <td>$@dto.Cost.ToString("F2")</td>
+                <td>$@dto.CurrentValue.ToString("F2")</td>
+                @if (dto.Gain >= 0)
+                {
+                    <td style="color: green">@dto.PercentageOfGain.ToString("P2")</td>
+                    <td style="color: green">$@dto.Gain.ToString("F2")</td>
+
+                }
+                else
+                {
+                    <td style="color: red">@dto.PercentageOfGain.ToString("P2")</td>
+                    <td style="color: red">$@dto.Gain.ToString("F2")</td>
+                }
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
