@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Teleport.Models;
 using Teleport.Repository;
@@ -19,9 +21,16 @@ namespace Teleport.Services
             await _stockTransactionRepo.UpsertStockTransaction(stockTransaction);
         }
 
-        public async Task DeleteTransaction(int transactionId)
+        public async Task DeleteTransaction(int transactionId, int customerId)
         {
-            await _stockTransactionRepo.DeleteTransaction(transactionId);
+            var customerTransactions = await _stockTransactionRepo.GetStockTransactionsBy(customerId);
+            if (customerTransactions.Any(trx => trx.Id == transactionId))
+            {
+                await _stockTransactionRepo.DeleteTransaction(transactionId);
+            }
+
+            throw new Exception(
+                $"Transaction is not exist in this customer transactions, CustomerId = {customerId}, StockTransactionId = {transactionId}");
         }
 
         public async Task<IEnumerable<StockTransaction>> GetAllStockTransactions()
