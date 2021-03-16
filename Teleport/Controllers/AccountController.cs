@@ -48,7 +48,7 @@ namespace Teleport.Controllers
             if (!System.IO.File.Exists($@"{DirectoryPath}{model.Account}.json"))
             {
                 model.ErrorMessage = "account not exist";
-                return RedirectToAction("SignUp", model);
+                return View("SignIn", model);
             }
 
             var json = await System.IO.File.ReadAllTextAsync($@"{DirectoryPath}{model.Account}.json");
@@ -56,7 +56,7 @@ namespace Teleport.Controllers
             if (accountInfo.Account != model.Account || accountInfo.Password != model.Password)
             {
                 model.ErrorMessage = "account or password is invalid";
-                return RedirectToAction("SignUp", model);
+                return View("SignIn", model);
             }
 
             var claims = new[] { new Claim("CustomerId", accountInfo.CustomerId.ToString()) };
