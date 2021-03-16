@@ -8,29 +8,33 @@
 <form asp-controller="StockTransaction" asp-action="AddStockTransaction" method="post">
     <div class="form-group">
         <label for="Date">Date</label>
-        <input class="form-control" type="date" id="Date" name="Date" value="" required="" />
+        <input class="form-control form-control-sm" type="date" id="Date" name="Date" value="" required="" />
     </div>
-    <div class="form-group">
-        <label for="Ticker">Ticker</label>
-        <input class="form-control" type="text" id="Ticker" name="Ticker" value="" required="" />
+    <div class="row">
+        <div class="col">
+            <label for="Ticker">Ticker</label>
+            <input class="form-control form-control-sm" type="text" id="Ticker" name="Ticker" value="" required="" placeholder="TSLA"/>
+        </div>
+        <div class="col">
+            <label for="Action">Action</label>
+            <select class="form-control form-control-sm" id="Action" name="Action">
+                <option selected="" value="@Model.StockActionDropDownList[0]">@Model.StockActionDropDownList[0]</option>
+                @for (var i = 1; i < Model.StockActionDropDownList.Count(); i++)
+                {
+                    <option value="@Model.StockActionDropDownList[i]">@Model.StockActionDropDownList[i]</option>
+                }
+            </select>
+        </div>
     </div>
-    <div class="form-group">
-        <label for="Action">Action</label>
-        <select class="form-control" id="Action" name="Action">
-            <option selected="" value="@Model.StockActionDropDownList[0]">@Model.StockActionDropDownList[0]</option>
-            @for (var i = 1; i < Model.StockActionDropDownList.Count(); i++)
-            {
-                <option value="@Model.StockActionDropDownList[i]">@Model.StockActionDropDownList[i]</option>
-            }
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="Quantity">Quantity</label>
-        <input class="form-control" type="number" step="0.01" id="Quantity" name="Quantity" value="" required="" />
-    </div>
-    <div class="form-group">
-        <label for="Price">Price</label>
-        <input class="form-control" type="number" step="0.01" id="Price" name="Price" value="" required="" />
+    <div class="row">
+        <div class="col">
+            <label for="Quantity">Quantity</label>
+            <input class="form-control form-control-sm" type="number" step="0.01" id="Quantity" name="Quantity" value="" required="" />
+        </div>
+        <div class="col">
+            <label for="Price">Price</label>
+            <input class="form-control form-control-sm" type="number" step="0.01" id="Price" name="Price" value="" required="" />
+        </div>
     </div>
 
     <button type="submit" class="btn btn-primary">Submit</button>
