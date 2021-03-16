@@ -3,7 +3,6 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Teleport.Extention;
 using Teleport.Models;
 using Teleport.Repository;
 using Teleport.Services;
@@ -84,7 +83,7 @@ namespace Teleport.Controllers
             var stockTransactions = stockTransactionDtos.Select(dto =>
             {
                 var transaction = dto.ToStockTransaction();
-                transaction.CustomerId = User.GetCustomerId();
+                transaction.CustomerId = CustomerId;
                 transaction.Id = id++;
 
                 return transaction;
