@@ -20,6 +20,7 @@ namespace Teleport.Controllers
             return View("SignUp", new AccountViewModel());
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<ViewResult> SignUp(AccountViewModel model)
         {
