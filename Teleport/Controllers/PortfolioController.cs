@@ -48,20 +48,20 @@ namespace Teleport.Controllers
         }
 
         [HttpGet]
+        public async Task<ViewResult> Position()
+        {
+            var stockPositions = await _stockService.GetAllStockPositions();
+
+            return View("Position", stockPositions);
+        }
+
+        [HttpGet]
         public async Task<RedirectToActionResult> DeleteAllHistoryTransactions()
         {
             var customerId = User.GetCustomerId();
             await _stockTransactionService.DeleteAllTransactionsBy(customerId);
 
             return RedirectToAction("History");
-        }
-
-        [HttpGet]
-        public async Task<ViewResult> Position()
-        {
-            var stockPositions = await _stockService.GetAllStockPositions();
-
-            return View("Position", stockPositions);
         }
 
         [AllowAnonymous]
