@@ -23,15 +23,7 @@ namespace Teleport.Services
 
         public async Task DeleteTransaction(int transactionId, int customerId)
         {
-            var customerTransactions = await _stockTransactionRepo.GetStockTransactionsBy(customerId);
-            if (customerTransactions.Any(trx => trx.Id == transactionId))
-            {
-                await _stockTransactionRepo.DeleteTransaction(transactionId);
-                return;
-            }
-
-            throw new Exception(
-                $"Transaction is not exist in this customer transactions, CustomerId = {customerId}, StockTransactionId = {transactionId}");
+            await _stockTransactionRepo.DeleteTransaction(transactionId, customerId);
         }
 
         public async Task<IEnumerable<StockTransaction>> GetStockTransactionsBy(int customerId)
@@ -39,9 +31,9 @@ namespace Teleport.Services
             return await _stockTransactionRepo.GetStockTransactionsBy(customerId);
         }
 
-        public async Task DeleteAllTransactionsBy(int customerId)
+        public void DeleteAllTransactionsBy(int customerId)
         {
-            await _stockTransactionRepo.DeleteAllTransactionsBy(customerId);
+            _stockTransactionRepo.DeleteAllTransactionsBy(customerId);
         }
     }
 }

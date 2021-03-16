@@ -6,11 +6,10 @@ namespace Teleport.Repository
 {
     public interface IStockTransactionRepo
     {
-        Task<IEnumerable<StockTransaction>> GetAllStockTransactions();
-        Task UpsertStockTransactions(IEnumerable<StockTransaction> stockTransactions);
+        Task UpsertStockTransactions(IEnumerable<StockTransaction> stockTransactions, int customerId);
         Task InsertStockTransaction(StockTransaction stockTransaction);
-        Task DeleteTransaction(int transactionId);
-        Task DeleteAllTransactionsBy(int customerId);
+        Task DeleteTransaction(int transactionId, int customerId);
+        void DeleteAllTransactionsBy(int customerId);
         Task<IEnumerable<StockTransaction>> GetStockTransactionsBy(int customerId);
     }
 }

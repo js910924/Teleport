@@ -53,9 +53,9 @@ namespace Teleport.Controllers
         }
 
         [HttpGet]
-        public async Task<RedirectToActionResult> DeleteAllHistoryTransactions()
+        public RedirectToActionResult DeleteAllHistoryTransactions()
         {
-            await _stockTransactionService.DeleteAllTransactionsBy(CustomerId);
+            _stockTransactionService.DeleteAllTransactionsBy(CustomerId);
 
             return RedirectToAction("History");
         }
@@ -89,7 +89,7 @@ namespace Teleport.Controllers
                 return transaction;
             });
 
-            await _stockTransactionRepo.UpsertStockTransactions(stockTransactions);
+            await _stockTransactionRepo.UpsertStockTransactions(stockTransactions, CustomerId);
 
             return RedirectToAction("History");
         }
