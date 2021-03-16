@@ -10,8 +10,7 @@ using Teleport.Services;
 
 namespace Teleport.Controllers
 {
-    [Authorize]
-    public class PortfolioController : Controller
+    public class PortfolioController : BaseAuthorizeController
     {
         private readonly IStockService _stockService;
         private readonly IStockTransactionService _stockTransactionService;
@@ -27,8 +26,7 @@ namespace Teleport.Controllers
         [HttpGet]
         public async Task<ViewResult> History()
         {
-            var customerId = User.GetCustomerId();
-            var stockTransactions = await _stockTransactionService.GetStockTransactionsBy(customerId);
+            var stockTransactions = await _stockTransactionService.GetStockTransactionsBy(CustomerId);
 
             var stockTransactionDtos = stockTransactions.Select(trx => trx.ToStockTransactionDto());
 
@@ -40,7 +38,7 @@ namespace Teleport.Controllers
             var viewModel = new StockHistoryViewModel()
             {
                 TransactionDtos = stockTransactionDtos.ToList(),
-                CustomerId = customerId,
+                CustomerId = CustomerId,
                 StockActionDropDownList = stockActions
             };
 
@@ -58,8 +56,7 @@ namespace Teleport.Controllers
         [HttpGet]
         public async Task<RedirectToActionResult> DeleteAllHistoryTransactions()
         {
-            var customerId = User.GetCustomerId();
-            await _stockTransactionService.DeleteAllTransactionsBy(customerId);
+            await _stockTransactionService.DeleteAllTransactionsBy(CustomerId);
 
             return RedirectToAction("History");
         }

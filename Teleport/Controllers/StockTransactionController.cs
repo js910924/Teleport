@@ -1,14 +1,11 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Teleport.Extention;
 using Teleport.Models;
 using Teleport.Services;
 
 namespace Teleport.Controllers
 {
-    [Authorize]
-    public class StockTransactionController : Controller
+    public class StockTransactionController : BaseAuthorizeController
     {
         private readonly IStockTransactionService _stockTransactionService;
 
@@ -20,9 +17,8 @@ namespace Teleport.Controllers
         [HttpPost]
         public async Task<RedirectToActionResult> AddStockTransaction(StockTransactionDto stockTransactionDto)
         {
-            var customerId = User.GetCustomerId();
             var stockTransaction = stockTransactionDto.ToStockTransaction();
-            stockTransaction.CustomerId = customerId;
+            stockTransaction.CustomerId = CustomerId;
 
             await _stockTransactionService.UpsertStockTransaction(stockTransaction);
 
@@ -32,8 +28,7 @@ namespace Teleport.Controllers
         [HttpGet]
         public async Task<RedirectToActionResult> DeleteStockTransaction(int transactionId)
         {
-            var customerId = User.GetCustomerId();
-            await _stockTransactionService.DeleteTransaction(transactionId, customerId);
+            await _stockTransactionService.DeleteTransaction(transactionId, CustomerId);
 
             return RedirectToAction("History", "Portfolio");
         }
