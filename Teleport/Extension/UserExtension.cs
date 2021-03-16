@@ -10,5 +10,10 @@ namespace Teleport.Extension
             var claim = claimsPrincipal.Claims.First(customerIdClaim => customerIdClaim.Type == "CustomerId");
             return int.Parse(claim.Value);
         }
+
+        public static bool IsLogIn(this ClaimsPrincipal claimsPrincipal)
+        {
+            return claimsPrincipal != null && claimsPrincipal.Identity.IsAuthenticated;
+        }
     }
 }
