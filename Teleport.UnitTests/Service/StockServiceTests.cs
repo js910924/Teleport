@@ -38,7 +38,7 @@ namespace Teleport.UnitTests.Service
             GivenAllStockTransaction(new StockTransaction { Ticker = "AAPL", Quantity = 1, Price = 190m });
             GivenStockInfoNotInDatabase();
 
-            var stockPositions = await _stockService.GetAllStockPositions();
+            var stockPositions = await _stockService.GetStockPositionsBy(0);
 
             stockPositions.Should().BeEquivalentTo(new List<StockPosition>()
             {
@@ -71,7 +71,7 @@ namespace Teleport.UnitTests.Service
                 new StockTransaction { Ticker = "TSLA", Quantity = 1, Price = 600m, });
             GivenStockInfoNotInDatabase();
 
-            var stockPositions = await _stockService.GetAllStockPositions();
+            var stockPositions = await _stockService.GetStockPositionsBy(0);
 
             stockPositions.Should().BeEquivalentTo(new List<StockPosition>()
             {
@@ -120,7 +120,7 @@ namespace Teleport.UnitTests.Service
                 );
             GivenStockInfoNotInDatabase();
 
-            var stockPositions = await _stockService.GetAllStockPositions();
+            var stockPositions = await _stockService.GetStockPositionsBy(0);
 
             stockPositions.Should().BeEquivalentTo(new List<StockPosition>()
             {
@@ -167,7 +167,7 @@ namespace Teleport.UnitTests.Service
                 );
             GivenStockInfoNotInDatabase();
 
-            var stockPositions = await _stockService.GetAllStockPositions();
+            var stockPositions = await _stockService.GetStockPositionsBy(0);
 
             stockPositions.Should().BeEquivalentTo(new List<StockPosition>()
             {
@@ -200,7 +200,7 @@ namespace Teleport.UnitTests.Service
             GivenStockInfoIsInOpenMarket(false);
             GivenStockInfoModifiedOnIsTenSecondsAgo();
 
-            await _stockService.GetAllStockPositions();
+            await _stockService.GetStockPositionsBy(0);
 
             await _stockProxy.DidNotReceive().GetStockInfo("AAPL");
         }
@@ -219,7 +219,7 @@ namespace Teleport.UnitTests.Service
             GivenStockInfoIsInOpenMarket();
             GivenStockInfoModifiedOnIsTenSecondsAgo(false);
 
-            await _stockService.GetAllStockPositions();
+            await _stockService.GetStockPositionsBy(0);
 
             await _stockProxy.Received().GetStockInfo("AAPL");
         }
@@ -238,7 +238,7 @@ namespace Teleport.UnitTests.Service
             GivenStockInfoIsInOpenMarket();
             GivenStockInfoModifiedOnIsTenSecondsAgo();
 
-            await _stockService.GetAllStockPositions();
+            await _stockService.GetStockPositionsBy(0);
 
             await _stockProxy.Received().GetStockInfo("AAPL");
         }
@@ -256,7 +256,7 @@ namespace Teleport.UnitTests.Service
             StockInfo stockInfo = null;
             await _stockInfoRepo.UpsertStockInfo(Arg.Do<StockInfo>(info => stockInfo = info));
 
-            await _stockService.GetAllStockPositions();
+            await _stockService.GetStockPositionsBy(0);
 
             Received.InOrder(() =>
             {
@@ -294,7 +294,7 @@ namespace Teleport.UnitTests.Service
             GivenStockInfoIsInOpenMarket();
             GivenStockInfoModifiedOnIsTenSecondsAgo();
 
-            await _stockService.GetAllStockPositions();
+            await _stockService.GetStockPositionsBy(0);
 
             await _stockProxy.Received().GetStockInfo("AAPL");
             await _stockInfoRepo.ReceivedWithAnyArgs().UpsertStockInfo(default);
@@ -319,7 +319,7 @@ namespace Teleport.UnitTests.Service
             GivenStockInfoIsInOpenMarket();
             GivenStockInfoModifiedOnIsTenSecondsAgo(false);
 
-            await _stockService.GetAllStockPositions();
+            await _stockService.GetStockPositionsBy(0);
 
             await _stockProxy.DidNotReceive().GetStockInfo("AAPL");
             await _stockInfoRepo.DidNotReceiveWithAnyArgs().UpsertStockInfo(default);
@@ -344,7 +344,7 @@ namespace Teleport.UnitTests.Service
             GivenStockInfoIsInOpenMarket(false);
             GivenStockInfoModifiedOnIsTenSecondsAgo(false);
 
-            await _stockService.GetAllStockPositions();
+            await _stockService.GetStockPositionsBy(0);
 
             await _stockProxy.DidNotReceive().GetStockInfo("AAPL");
             await _stockInfoRepo.DidNotReceiveWithAnyArgs().UpsertStockInfo(default);
@@ -377,7 +377,7 @@ namespace Teleport.UnitTests.Service
 
         private void GivenAllStockTransaction(params StockTransaction[] transactions)
         {
-            _stockTransactionService.GetAllStockTransactions().Returns(Task.FromResult((IEnumerable<StockTransaction>)transactions));
+            _stockTransactionService.GetStockTransactionsBy(Arg.Any<int>()).Returns(Task.FromResult((IEnumerable<StockTransaction>)transactions));
         }
 
         private void GiveStockInfoFromProxy(StockInfo stockInfo)

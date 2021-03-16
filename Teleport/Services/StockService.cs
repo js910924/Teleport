@@ -23,9 +23,9 @@ namespace Teleport.Services
             _stockTransactionService = stockTransactionService;
         }
 
-        public async Task<IEnumerable<StockPosition>> GetAllStockPositions()
+        public async Task<IEnumerable<StockPosition>> GetStockPositionsBy(int customerId)
         {
-            var stockTransactions = await _stockTransactionService.GetAllStockTransactions();
+            var stockTransactions = await _stockTransactionService.GetStockTransactionsBy(customerId);
 
             var stockPositions = ToStockPositions(stockTransactions);
 

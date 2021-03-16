@@ -33,11 +33,6 @@ namespace Teleport.Services
                 $"Transaction is not exist in this customer transactions, CustomerId = {customerId}, StockTransactionId = {transactionId}");
         }
 
-        public async Task<IEnumerable<StockTransaction>> GetAllStockTransactions()
-        {
-            return await _stockTransactionRepo.GetAllStockTransactions();
-        }
-
         public async Task<IEnumerable<StockTransaction>> GetStockTransactionsBy(int customerId)
         {
             return await _stockTransactionRepo.GetStockTransactionsBy(customerId);

@@ -6,6 +6,6 @@ namespace Teleport.Services
 {
     public interface IStockService
     {
-        Task<IEnumerable<StockPosition>> GetAllStockPositions();
+        Task<IEnumerable<StockPosition>> GetStockPositionsBy(int customerId);
     }
 }

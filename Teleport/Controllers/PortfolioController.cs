@@ -48,7 +48,7 @@ namespace Teleport.Controllers
         [HttpGet]
         public async Task<ViewResult> Position()
         {
-            var stockPositions = await _stockService.GetAllStockPositions();
+            var stockPositions = await _stockService.GetStockPositionsBy(CustomerId);
 
             return View("Position", stockPositions);
         }
