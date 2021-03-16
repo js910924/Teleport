@@ -27,6 +27,7 @@ namespace Teleport.Services
             if (customerTransactions.Any(trx => trx.Id == transactionId))
             {
                 await _stockTransactionRepo.DeleteTransaction(transactionId);
+                return;
             }
 
             throw new Exception(
