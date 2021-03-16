@@ -28,7 +28,7 @@ namespace Teleport.Repository
             await System.IO.File.WriteAllTextAsync(FilePath, json);
         }
 
-        public async Task UpsertStockTransaction(StockTransaction stockTransaction)
+        public async Task InsertStockTransaction(StockTransaction stockTransaction)
         {
             var stockTransactions = (await GetAllStockTransactions()).ToList();
 

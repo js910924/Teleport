@@ -8,7 +8,7 @@ namespace Teleport.Repository
     {
         Task<IEnumerable<StockTransaction>> GetAllStockTransactions();
         Task UpsertStockTransactions(IEnumerable<StockTransaction> stockTransactions);
-        Task UpsertStockTransaction(StockTransaction stockTransaction);
+        Task InsertStockTransaction(StockTransaction stockTransaction);
         Task DeleteTransaction(int transactionId);
         Task DeleteAllTransactionsBy(int customerId);
         Task<IEnumerable<StockTransaction>> GetStockTransactionsBy(int customerId);
