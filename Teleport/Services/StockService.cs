@@ -62,22 +62,29 @@ namespace Teleport.Services
 
         private async Task GetRealTimeStockPosition(StockPosition position)
         {
-            var stockInfo = await _stockInfoRepo.GetStockInfo(position.Ticker);
-            if (stockInfo.Symbol != position.Ticker || ShouldGetStockInfoFromProxy(stockInfo))
+            try
             {
-                stockInfo = await _stockProxy.GetStockInfo(position.Ticker);
-                await _stockInfoRepo.UpsertStockInfo(stockInfo);
+                var stockInfo = await _stockInfoRepo.GetStockInfo(position.Ticker);
+                if (stockInfo.Symbol != position.Ticker || ShouldGetStockInfoFromProxy(stockInfo))
+                {
+                    stockInfo = await _stockProxy.GetStockInfo(position.Ticker);
+                    await _stockInfoRepo.UpsertStockInfo(stockInfo);
+                }
+
+                var currentValue = stockInfo.Price * position.Shares;
+                var gain = currentValue - position.Cost;
+
+                position.CurrentPrice = stockInfo.Price;
+                position.CurrentValue = currentValue;
+                position.PercentageOfChange = Math.Round(stockInfo.PercentageOfChange, 4);
+                position.Change = stockInfo.Change;
+                position.Gain = gain;
+                position.PercentageOfGain = Math.Round(gain / position.Cost, 4);
             }
-
-            var currentValue = stockInfo.Price * position.Shares;
-            var gain = currentValue - position.Cost;
-
-            position.CurrentPrice = stockInfo.Price;
-            position.CurrentValue = currentValue;
-            position.PercentageOfChange = Math.Round(stockInfo.PercentageOfChange, 4);
-            position.Change = stockInfo.Change;
-            position.Gain = gain;
-            position.PercentageOfGain = Math.Round(gain / position.Cost, 4);
+            catch (Exception e)
+            {
+                throw new Exception($"GetRealTimeStockPosition Fail | stock symbol = {position.Ticker}, exception = {e}");
+            }
         }
 
         private bool ShouldGetStockInfoFromProxy(StockInfo stockInfo)
