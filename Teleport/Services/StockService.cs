@@ -47,14 +47,18 @@ namespace Teleport.Services
                 {
                     var transactions = group.ToList();
                     var buyTransactions = transactions.Where(trx => trx.Action == StockAction.Buy).ToList();
-                    var sellTransactions = transactions.Where(trx => trx.Action == StockAction.Sell).ToList();
-                    var shares = (int) (buyTransactions.Sum(trx => trx.Quantity) - sellTransactions.Sum(trx => trx.Quantity));
-                    var cost = buyTransactions.Sum(trx => trx.Quantity * trx.Price) - sellTransactions.Sum(trx => trx.Quantity * trx.Price);
+                    var buyCost = buyTransactions.Sum(trx => trx.Quantity * trx.Price);
+                    var buyShares = buyTransactions.Sum(trx => trx.Quantity);
+
+                    var averageBuyPrice = buyCost / buyShares;
+                    var currentShares = (int) transactions.Sum(trx => trx.Action == StockAction.Buy ? trx.Quantity : trx.Quantity * -1);
+
+                    var cost = averageBuyPrice * currentShares;
                     return new StockPosition
                     {
                         Ticker = group.Key,
-                        Shares = shares,
-                        AveragePrice = Math.Round(cost / shares, 2),
+                        Shares = currentShares,
+                        AveragePrice = Math.Round(cost / currentShares, 2),
                         Cost = cost,
                     };
                 }).ToList();
