@@ -7,7 +7,7 @@ namespace Teleport.Extension
     {
         public static int GetCustomerId(this ClaimsPrincipal claimsPrincipal)
         {
-            var claim = claimsPrincipal.Claims.First(claim => claim.Type == "CustomerId");
+            var claim = claimsPrincipal.Claims.First(customerIdClaim => customerIdClaim.Type == "CustomerId");
             return int.Parse(claim.Value);
         }
     }
