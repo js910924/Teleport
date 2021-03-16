@@ -23,6 +23,7 @@
                     <div class="card-body">
                         <h5 class="card-title text-center">Sign In</h5>
                         <form form-signin asp-controller="Account" asp-action="SignIn" method="post">
+                            @Html.AntiForgeryToken()
                             <div class="form-label-group">
                                 <input class="form-control" type="text" id="Account" name="Account" value="@Model.Account" placeholder="Account" required="" autofocus="" />
                                 <label for="Account">Account</label>

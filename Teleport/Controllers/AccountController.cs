@@ -42,6 +42,7 @@ namespace Teleport.Controllers
             return View("SignIn", new AccountViewModel());
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> SignIn(AccountViewModel model)
         {
