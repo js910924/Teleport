@@ -87,6 +87,7 @@ namespace Teleport.Controllers
             var stockTransactions = stockTransactionDtos.Select(dto =>
             {
                 var transaction = dto.ToStockTransaction();
+                transaction.CustomerId = User.GetCustomerId();
                 transaction.Id = id++;
 
                 return transaction;
