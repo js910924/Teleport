@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Teleport.Extention;
+using Teleport.Extension;
 
 namespace Teleport.Controllers
 {

@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Security.Claims;
 
-namespace Teleport.Extention
+namespace Teleport.Extension
 {
     public static class UserExtension
     {
