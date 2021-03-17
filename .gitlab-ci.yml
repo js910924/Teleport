@@ -1,0 +1,18 @@
+variables:
+  PROJECT_NAME: Teleport
+
+stages:
+  - build
+  - test
+  - staging
+  - production
+
+build:
+  stage: build
+  script:
+    - "dotnet build"
+
+test:
+  stage: test
+  script:
+	- "dotnet test ./$PROJECT_NAME.UnitTests --no-restore"
