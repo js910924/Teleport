@@ -1,19 +1,15 @@
-variables:
-  PROJECT_NAME: Teleport
+image: microsoft/dotnet:latest
 
 stages:
   - build
   - test
-  - staging
-  - production
 
 build:
   stage: build
-  image: mcr.microsoft.com/dotnet/sdk:5.0-buster-slim
   script:
-    - "dotnet build"
+    - "dotnet build --no-restore"
 
 test:
   stage: test
   script:
-	- "dotnet test ./$PROJECT_NAME.UnitTests --no-restore"
+	- "dotnet test --no-restore"
