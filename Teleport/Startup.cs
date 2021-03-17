@@ -44,7 +44,7 @@ namespace Teleport
                 option.ExpireTimeSpan = TimeSpan.FromMinutes(60);   // default is 14 days
             });
 
-            //ConfigureSchedulers(services);
+            ConfigureSchedulers(services);
         }
 
         private static void ConfigureService(IServiceCollection services)
@@ -65,6 +65,7 @@ namespace Teleport
         private static void ConfigureSchedulers(IServiceCollection services)
         {
             services.AddTransient<FetchStockTickerJob>();
+            services.AddTransient<UpdateAllStockInfoJob>();
 
             var container = services.BuildServiceProvider();
 
@@ -77,19 +78,30 @@ namespace Teleport
             // Tell the scheduler to use the custom job factory
             scheduler.JobFactory = jobFactory;
 
-            var job = JobBuilder.Create<FetchStockTickerJob>()
-                .WithIdentity("job1", "group1")
+            //var job = JobBuilder.Create<FetchStockTickerJob>()
+            //    .WithIdentity("job1", "group1")
+            //    .Build();
+
+            //var trigger = TriggerBuilder.Create()
+            //    .WithIdentity("trigger1", "group1")
+            //    .StartNow()
+            //    .WithSimpleSchedule(x => x
+            //        .WithIntervalInSeconds(10)
+            //        .RepeatForever())
+            //    .Build();
+            var updateAllStockInfoJob = JobBuilder.Create<UpdateAllStockInfoJob>()
+                .WithIdentity("job2", "group2")
                 .Build();
 
             var trigger = TriggerBuilder.Create()
-                .WithIdentity("trigger1", "group1")
-                .StartNow()
+                .WithIdentity("trigger2", "group2")
                 .WithSimpleSchedule(x => x
-                    .WithIntervalInSeconds(10)
+                    .WithIntervalInMinutes(1)
                     .RepeatForever())
+                .ForJob(updateAllStockInfoJob)
                 .Build();
 
-            scheduler.ScheduleJob(job, trigger);
+            scheduler.ScheduleJob(updateAllStockInfoJob, trigger);
             scheduler.Start().GetAwaiter().GetResult();
         }
 

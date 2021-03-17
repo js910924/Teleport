@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using System.Collections.Generic;
 using Teleport.Models;
 
 namespace Teleport.Repository
@@ -7,5 +8,6 @@ namespace Teleport.Repository
     {
         Task<StockInfo> GetStockInfo(string stockSymbol);
         Task UpsertStockInfo(StockInfo stockInfo);
+        Task<IEnumerable<StockInfo>> GetAllStockInfo();
     }
 }

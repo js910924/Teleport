@@ -69,7 +69,7 @@ namespace Teleport.Services
             try
             {
                 var stockInfo = await _stockInfoRepo.GetStockInfo(position.Ticker);
-                if (stockInfo.Symbol != position.Ticker || ShouldGetStockInfoFromProxy(stockInfo))
+                if (stockInfo.Symbol != position.Ticker)
                 {
                     stockInfo = await _stockProxy.GetStockInfo(position.Ticker);
                     await _stockInfoRepo.UpsertStockInfo(stockInfo);
@@ -89,24 +89,6 @@ namespace Teleport.Services
             {
                 throw new Exception($"GetRealTimeStockPosition Fail | stock symbol = {position.Ticker}, exception = {e}");
             }
-        }
-
-        private bool ShouldGetStockInfoFromProxy(StockInfo stockInfo)
-        {
-            var isOpenMarket = _stockMarketChecker.IsOpenMarket();
-            var isModifiedOnInOpenMarket = _stockMarketChecker.IsInOpenMarket(stockInfo.ModifiedOn);
-            if (!isOpenMarket && !isModifiedOnInOpenMarket)
-            {
-                return false;
-            }
-
-            var isModifiedOnTenSecondsAgo = _stockMarketChecker.IsTenSecondsAgo(stockInfo.ModifiedOn);
-            if (isModifiedOnTenSecondsAgo)
-            {
-                return true;
-            }
-
-            return !isOpenMarket;
         }
     }
 }
