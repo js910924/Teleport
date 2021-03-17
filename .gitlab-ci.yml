@@ -1,5 +1,8 @@
 image: microsoft/dotnet:latest
 
+before_script:
+  - "dotnet restore"
+
 stages:
   - build
   - test
