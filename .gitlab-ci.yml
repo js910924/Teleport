@@ -22,7 +22,7 @@ test:
 
 staging:
   stage: staging
-  image: gitlab/dind
+  image: docker:latest
   services:
     - docker:dind
   script:
