@@ -21,7 +21,7 @@ namespace Teleport.Repository
         {
             var stockTransactions = (await GetStockTransactionsBy(stockTransaction.CustomerId)).ToList();
 
-            stockTransaction.Id = stockTransactions.Max(trx => trx.Id) + 1;
+            stockTransaction.Id = !stockTransactions.Any() ? 1 : stockTransactions.Max(trx => trx.Id) + 1;
             stockTransactions.Add(stockTransaction);
 
             await UpsertStockTransactions(stockTransactions, stockTransaction.CustomerId);
