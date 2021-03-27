@@ -12,7 +12,7 @@ namespace Teleport.Controllers
 {
     public class AccountController : Controller
     {
-        private const string DirectoryPath = "/app/Database/Customer/";
+        private const string DirectoryPath = "./Database/Customer/";
 
         [HttpGet]
         public ViewResult SignUp()

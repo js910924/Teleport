@@ -8,7 +8,7 @@ namespace Teleport.Repository
 {
     public class StockTransactionRepo : IStockTransactionRepo
     {
-        private const string DirectoryPath = @"/app/Database/Transaction/";
+        private const string DirectoryPath = @"./Database/Transaction/";
 
         public async Task UpsertStockTransactions(IEnumerable<StockTransaction> stockTransactions, int customerId)
         {

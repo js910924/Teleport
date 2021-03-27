@@ -10,7 +10,7 @@ namespace Teleport.Repository
 {
     internal class StockInfoRepo : IStockInfoRepo
     {
-        private const string FilePathPrefix = @"/app/Database/StockInfo/";
+        private const string FilePathPrefix = @"./Database/StockInfo/";
 
         public async Task<StockInfo> GetStockInfo(string stockSymbol)
         {
