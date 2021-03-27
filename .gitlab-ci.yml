@@ -34,4 +34,4 @@ staging:
     - docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
     - docker build -t $HEROKU_IMAGE_TAG .
     - docker push $HEROKU_IMAGE_TAG
-    - docker run --rm -e HEROKU_API_KEY=$HEROKU_API_KEY dickeyxxx/heroku-cli container:release web --app teleport-target
+    - docker run --rm -e HEROKU_API_KEY=$HEROKU_API_KEY dickeyxxx/heroku-cli container:login && container:release web --app teleport-target
