@@ -1,18 +1,28 @@
-image: mcr.microsoft.com/dotnet/sdk:5.0-buster-slim
-
-before_script:
-  - "dotnet restore"
+variables:
+  PROJECT_NAME: Teleport
+  IMAGE_TAG: js910924/teleport
 
 stages:
   - build
   - test
+  - staging
 
 build:
   stage: build
+  image: mcr.microsoft.com/dotnet/sdk:5.0-buster-slim
   script:
-    - "dotnet build --no-restore"
+    - echo "$VERSION" > ./$PROJECT_NAME/wwwroot/version.txt
+    - dotnet build
 
 test:
   stage: test
+  image: mcr.microsoft.com/dotnet/sdk:5.0-buster-slim
   script:
-    - "dotnet test --no-restore"
+    - dotnet test
+
+staging:
+  stage: staging
+  script:
+    - echo "${DOCKERHUB_PWD}" | docker login -u "${DOCKERHUB_USER}" --password-stdin
+    - docker build -t $IMAGE_TAG .
+    - docker push $IMAGE_TAG
