@@ -22,6 +22,8 @@ test:
 
 staging:
   stage: staging
+  services:
+    - docker:dind
   script:
     - echo "${DOCKERHUB_PWD}" | docker login -u "${DOCKERHUB_USER}" --password-stdin
     - docker build -t $IMAGE_TAG .
