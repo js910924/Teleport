@@ -30,9 +30,10 @@ namespace Teleport.Controllers
                 return View("SignUp", model);
             }
 
-            var accountInfo = model.ToAccountInfo();
-            accountInfo.CustomerId = GetTotalCustomerAmount() + 1;
-            await System.IO.File.WriteAllTextAsync($@"{DirectoryPath}{model.Account}.json", JsonConvert.SerializeObject(accountInfo));
+            var customer = model.ToCustomer();
+            customer.CustomerId = GetTotalCustomerAmount() + 1;
+            customer.CreatedOn = DateTime.Now;
+            await System.IO.File.WriteAllTextAsync($@"{DirectoryPath}{model.Account}.json", JsonConvert.SerializeObject(customer));
 
             return View("SignIn", model);
         }
@@ -54,14 +55,14 @@ namespace Teleport.Controllers
             }
 
             var json = await System.IO.File.ReadAllTextAsync($@"{DirectoryPath}{model.Account}.json");
-            var accountInfo = JsonConvert.DeserializeObject<AccountInfo>(json);
-            if (accountInfo.Account != model.Account || accountInfo.Password != model.Password)
+            var customer = JsonConvert.DeserializeObject<Customer>(json);
+            if (customer.Account != model.Account || customer.Password != model.Password)
             {
                 model.ErrorMessage = "account or password is invalid";
                 return View("SignIn", model);
             }
 
-            var claims = new[] { new Claim("CustomerId", accountInfo.CustomerId.ToString()) };
+            var claims = new[] { new Claim("CustomerId", customer.CustomerId.ToString()) };
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(claimsIdentity);
 

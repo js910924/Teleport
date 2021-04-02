@@ -6,7 +6,7 @@
         public string Password { get; set; }
         public string ErrorMessage { get; set; }
 
-        public AccountInfo ToAccountInfo()
+        public Customer ToCustomer()
         {
             return new()
             {
