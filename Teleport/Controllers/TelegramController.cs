@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Threading.Tasks;
+using Teleport.Repository;
 using Teleport.Services;
 
 namespace Teleport.Controllers
@@ -8,11 +10,13 @@ namespace Teleport.Controllers
     {
         private readonly ITelegramService _telegramService;
         private readonly IPttService _pttService;
+        private readonly IPttArticleRepo _pttArticleRepo;
 
-        public TelegramController(ITelegramService telegramService, IPttService pttService)
+        public TelegramController(ITelegramService telegramService, IPttService pttService, IPttArticleRepo pttArticleRepo)
         {
             _telegramService = telegramService;
             _pttService = pttService;
+            _pttArticleRepo = pttArticleRepo;
         }
 
         [HttpGet]
@@ -28,14 +32,23 @@ namespace Teleport.Controllers
             await CrawlPtt("Stock", "標的", 1);
         }
 
-        public async Task CrawlPtt(string board, string titleElement, int pageAmount)
+        public async Task<OkResult> CrawlPtt(string board, string titleElement, int pageAmount)
         {
             var targetArticles = await _pttService.CrawlTargetArticleLinks(board, titleElement, pageAmount);
+            var pttArticlesInDatabase = await _pttArticleRepo.GetAllArticlesTitle(board);
+            var latestArticles = targetArticles.Where(article =>
+                pttArticlesInDatabase.All(x => x.Title != article.Title));
 
-            foreach (var article in targetArticles)
+            var tasks = Enumerable.Empty<Task>().ToList();
+            foreach (var article in latestArticles)
             {
-                await _telegramService.SendMessage(article.ToPttLink());
+                tasks.Add(_telegramService.SendMessage(article.ToPttLink()));
+                tasks.Add(_pttArticleRepo.Insert(article));
             }
+
+            await Task.WhenAll(tasks);
+
+            return Ok();
         }
     }
 }

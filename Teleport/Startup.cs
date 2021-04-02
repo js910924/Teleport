@@ -60,6 +60,7 @@ namespace Teleport
         {
             services.AddTransient<IStockTransactionRepo, StockTransactionRepo>();
             services.AddTransient<IStockInfoRepo, StockInfoRepo>();
+            services.AddTransient<IPttArticleRepo, PttArticleRepo>();
         }
 
         private static void ConfigureSchedulers(IServiceCollection services)
@@ -78,30 +79,31 @@ namespace Teleport
             // Tell the scheduler to use the custom job factory
             scheduler.JobFactory = jobFactory;
 
-            //var job = JobBuilder.Create<FetchStockTickerJob>()
-            //    .WithIdentity("job1", "group1")
-            //    .Build();
-
-            //var trigger = TriggerBuilder.Create()
-            //    .WithIdentity("trigger1", "group1")
-            //    .StartNow()
-            //    .WithSimpleSchedule(x => x
-            //        .WithIntervalInSeconds(10)
-            //        .RepeatForever())
-            //    .Build();
-            var updateAllStockInfoJob = JobBuilder.Create<UpdateAllStockInfoJob>()
-                .WithIdentity("job2", "group2")
+            var fetchPttStockArticleJob = JobBuilder.Create<FetchStockTickerJob>()
+                .WithIdentity("job1", "group1")
                 .Build();
 
-            var trigger = TriggerBuilder.Create()
-                .WithIdentity("trigger2", "group2")
+            var fetchPttStockArticleTrigger = TriggerBuilder.Create()
+                .WithIdentity("trigger1", "group1")
+                .StartNow()
                 .WithSimpleSchedule(x => x
-                    .WithIntervalInMinutes(1)
+                    .WithIntervalInSeconds(10)
                     .RepeatForever())
-                .ForJob(updateAllStockInfoJob)
                 .Build();
+            //var updateAllStockInfoJob = JobBuilder.Create<UpdateAllStockInfoJob>()
+            //    .WithIdentity("job2", "group2")
+            //    .Build();
 
-            scheduler.ScheduleJob(updateAllStockInfoJob, trigger);
+            //var updateAllStockInfoTrigger = TriggerBuilder.Create()
+            //    .WithIdentity("trigger2", "group2")
+            //    .WithSimpleSchedule(x => x
+            //        .WithIntervalInMinutes(1)
+            //        .RepeatForever())
+            //    .ForJob(updateAllStockInfoJob)
+            //    .Build();
+
+            //scheduler.ScheduleJob(updateAllStockInfoJob, updateAllStockInfoTrigger);
+            scheduler.ScheduleJob(fetchPttStockArticleJob, fetchPttStockArticleTrigger);
             scheduler.Start().GetAwaiter().GetResult();
         }
 
