@@ -6,6 +6,7 @@ EXPOSE 80
 EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS build
+RUN apt-get update -yq && apt-get upgrade -yq && apt-get install -yq curl
 WORKDIR /src
 COPY ["Teleport/Teleport.csproj", "Teleport/"]
 RUN dotnet restore "Teleport/Teleport.csproj"
