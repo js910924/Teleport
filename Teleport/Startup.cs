@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Quartz;
 using Quartz.Impl;
+using Teleport.Controllers;
 using Teleport.Factory;
 using Teleport.Job;
 using Teleport.Proxy;
@@ -54,6 +55,7 @@ namespace Teleport
             services.AddTransient<IStockService, StockService>();
             services.AddTransient<IStockMarketChecker, StockMarketChecker>();
             services.AddTransient<IStockTransactionService, StockTransactionService>();
+            services.AddTransient<IShoppingCartService, ShoppingCartService>();
         }
 
         private static void ConfigureRepo(IServiceCollection services)
@@ -61,6 +63,7 @@ namespace Teleport
             services.AddTransient<IStockTransactionRepo, StockTransactionRepo>();
             services.AddTransient<IStockInfoRepo, StockInfoRepo>();
             services.AddTransient<IPttArticleRepo, PttArticleRepo>();
+            services.AddTransient<IShoppingCartRepo, ShoppingCartRepo>();
         }
 
         private static void ConfigureSchedulers(IServiceCollection services)

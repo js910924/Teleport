@@ -1,0 +1,11 @@
+﻿@model ShoppingCartViewModel
+
+@{
+    ViewBag.Title = "Shopping Cart";
+    Layout = "_Layout";
+}
+
+@foreach (var commodity in Model.Commodities)
+{
+    <p> @commodity.Title </p>
+}

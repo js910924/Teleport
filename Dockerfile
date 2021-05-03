@@ -20,7 +20,7 @@ RUN dotnet publish "Teleport.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-RUN mkdir Database Database/Transaction Database/StockInfo Database/Customer Database/PttArticles
+RUN mkdir Database Database/Transaction Database/StockInfo Database/Customer Database/PttArticles Database/ShoppingCart
 # ENTRYPOINT ["dotnet", "Teleport.dll"]
 
 # Use the following instead for Heroku
