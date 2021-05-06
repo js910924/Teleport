@@ -1,4 +1,4 @@
-﻿using Teleport.Controllers;
+﻿using System.Threading.Tasks;
 using Teleport.Models;
 
 namespace Teleport.Services
@@ -6,5 +6,6 @@ namespace Teleport.Services
     public interface IShoppingCartService
     {
         ShoppingCart GetCart(int customerId);
+        Task<ShoppingCart> AddCommodity(int customerId, int commodityId);
     }
 }

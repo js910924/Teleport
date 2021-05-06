@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
@@ -11,6 +12,7 @@ namespace Teleport.UnitTests.Service
     [TestFixture]
     public class ShoppingCartServiceTests
     {
+        private const int CustomerId = 9487;
         private ShoppingCartService _shoppingCartService;
         private IShoppingCartRepo _shoppingCartRepo;
 
@@ -25,21 +27,42 @@ namespace Teleport.UnitTests.Service
         [Test]
         public void should_get_all_commodity_when_call_Index()
         {
-            const int customerId = 9487;
-
-            _shoppingCartRepo.GetByCustomerId(customerId).Returns(new ShoppingCart()
+            GivenShoppingCart(new ShoppingCart
             {
-                CustomerId = customerId,
+                CustomerId = CustomerId,
                 Commodities = new List<Commodity>()
             });
 
-            var shoppingCart = _shoppingCartService.GetCart(customerId);
+            var shoppingCart = _shoppingCartService.GetCart(CustomerId);
 
             shoppingCart.Should().BeEquivalentTo(new ShoppingCart
             {
-                CustomerId = customerId,
+                CustomerId = CustomerId,
                 Commodities = new List<Commodity>()
             });
+        }
+
+        [Test]
+        public async Task should_add_commodity_to_customer_shopping_cart_when_call_Add()
+        {
+            GivenShoppingCart(new ShoppingCart
+            {
+                CustomerId = CustomerId,
+                Commodities = new List<Commodity>()
+            });
+
+            var shoppingCart = await _shoppingCartService.AddCommodity(CustomerId, 91);
+
+            shoppingCart.Should().BeEquivalentTo(new ShoppingCart
+            {
+                CustomerId = CustomerId,
+                Commodities = new List<Commodity> { new() { Id = 91 }},
+            });
+        }
+
+        private void GivenShoppingCart(ShoppingCart shoppingCart)
+        {
+            _shoppingCartRepo.GetByCustomerId(CustomerId).Returns(shoppingCart);
         }
     }
 }

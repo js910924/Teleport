@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Teleport.Models;
 
@@ -18,13 +19,20 @@ namespace Teleport.Repository
                 {
                     Id = 0,
                     CustomerId = customerId,
-                    Commodities = Enumerable.Empty<Commodity>()
+                    Commodities = Enumerable.Empty<Commodity>().ToList()
                 };
             }
    
             var json = File.ReadAllText(filePath);
 
             return JsonConvert.DeserializeObject<ShoppingCart>(json);
+        }
+
+        public async Task Upsert(ShoppingCart shoppingCart)
+        {
+            var json = JsonConvert.SerializeObject(shoppingCart, Formatting.Indented);
+
+            await File.WriteAllTextAsync($"{DirectoryPath}{shoppingCart.CustomerId}_shoppingCart.json", json);
         }
     }
 }
