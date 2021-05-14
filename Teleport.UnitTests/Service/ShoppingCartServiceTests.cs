@@ -51,12 +51,17 @@ namespace Teleport.UnitTests.Service
                 Commodities = new List<Commodity>()
             });
 
-            var shoppingCart = await _shoppingCartService.AddCommodity(CustomerId, 91);
+            var commodity = new Commodity()
+            {
+                Id = 91,
+                Title = "book"
+            };
+            var shoppingCart = await _shoppingCartService.AddCommodity(CustomerId, commodity);
 
             shoppingCart.Should().BeEquivalentTo(new ShoppingCart
             {
                 CustomerId = CustomerId,
-                Commodities = new List<Commodity> { new() { Id = 91 }},
+                Commodities = new List<Commodity> { new() { Id = 91, Title = "book"}},
             });
         }
 

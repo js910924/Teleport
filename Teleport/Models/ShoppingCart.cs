@@ -6,19 +6,10 @@ namespace Teleport.Models
     {
         public int CustomerId { get; set; }
         public List<Commodity> Commodities { get; set; }
-        public int Id { get; set; }
 
-        public ShoppingCartViewModel ToShoppingCartViewModel()
+        public void AddCommodity(Commodity commodity)
         {
-            return new()
-            {
-                Commodities = Commodities
-            };
-        }
-
-        public void AddCommodity(int commodityId)
-        {
-            Commodities.Add(new Commodity { Id = commodityId });
+            Commodities.Add(commodity);
         }
     }
 }

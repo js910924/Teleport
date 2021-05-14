@@ -6,6 +6,6 @@ namespace Teleport.Services
     public interface IShoppingCartService
     {
         ShoppingCart GetCart(int customerId);
-        Task<ShoppingCart> AddCommodity(int customerId, int commodityId);
+        Task<ShoppingCart> AddCommodity(int customerId, Commodity commodity);
     }
 }
