@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Teleport.Controllers;
 
 namespace Teleport.Models
 {
