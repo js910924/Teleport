@@ -12,7 +12,7 @@ namespace Teleport.Repository
     internal class StockInfoRepo : IStockInfoRepo
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
-        private const string DirPath = @"/Database/StockInfo/";
+        private const string DirPath = "/Database/StockInfo/";
 
         public StockInfoRepo(IWebHostEnvironment webHostEnvironment)
         {

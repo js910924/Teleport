@@ -10,7 +10,7 @@ namespace Teleport.Repository
     public class ShoppingCartRepo : IShoppingCartRepo
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
-        private const string DirectoryPath = @"/Database/ShoppingCart/";
+        private const string DirectoryPath = "/Database/ShoppingCart/";
 
         public ShoppingCartRepo(IWebHostEnvironment webHostEnvironment)
         {

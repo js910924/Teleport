@@ -10,7 +10,7 @@ namespace Teleport.Repository
     public class StockTransactionRepo : IStockTransactionRepo
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
-        private const string DirPath = @"/Database/Transaction/";
+        private const string DirPath = "/Database/Transaction/";
 
         public StockTransactionRepo(IWebHostEnvironment webHostEnvironment)
         {

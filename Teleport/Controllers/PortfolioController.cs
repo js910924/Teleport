@@ -64,7 +64,7 @@ namespace Teleport.Controllers
         [HttpGet]
         public async Task<RedirectToActionResult> ImportMyExcelTransactions()
         {
-            var data = await System.IO.File.ReadAllLinesAsync(@"/app/Database/realTransactions.txt");
+            var data = await System.IO.File.ReadAllLinesAsync("/app/Database/realTransactions.txt");
             var stockTransactionDtos = data.Select(d =>
             {
                 var strings = d.Split();
