@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json;
 using Teleport.Models;
 
@@ -10,13 +11,19 @@ namespace Teleport.Repository
 {
     internal class StockInfoRepo : IStockInfoRepo
     {
-        private const string FilePathPrefix = @"./Database/StockInfo/";
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private const string DirPath = @"/Database/StockInfo/";
+
+        public StockInfoRepo(IWebHostEnvironment webHostEnvironment)
+        {
+            _webHostEnvironment = webHostEnvironment;
+        }
 
         public async Task<StockInfo> GetStockInfo(string stockSymbol)
         {
-            if (File.Exists($"{FilePathPrefix}{stockSymbol}.json"))
+            if (File.Exists($"{_webHostEnvironment.ContentRootPath}{DirPath}{stockSymbol}.json"))
             {
-                var json = await File.ReadAllTextAsync($"{FilePathPrefix}{stockSymbol}.json");
+                var json = await File.ReadAllTextAsync($"{_webHostEnvironment.ContentRootPath}{DirPath}{stockSymbol}.json");
 
                 return JsonConvert.DeserializeObject<StockInfo>(json);
             }
@@ -36,12 +43,12 @@ namespace Teleport.Repository
 
             stockInfo.ModifiedOn = DateTime.Now;
 
-            await File.WriteAllTextAsync($"{FilePathPrefix}{stockInfo.Symbol}.json", JsonConvert.SerializeObject(stockInfo));
+            await File.WriteAllTextAsync($"{_webHostEnvironment.ContentRootPath}{DirPath}{stockInfo.Symbol}.json", JsonConvert.SerializeObject(stockInfo));
         }
 
         public async Task<IEnumerable<StockInfo>> GetAllStockInfo()
         {
-            var filePaths = Directory.EnumerateFiles(FilePathPrefix);
+            var filePaths = Directory.EnumerateFiles($"{_webHostEnvironment.ContentRootPath}{DirPath}");
             var tasks = filePaths.Select(filePath => File.ReadAllTextAsync(filePath));
 
             await Task.WhenAll(tasks);

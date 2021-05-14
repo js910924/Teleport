@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json;
 using Teleport.Models;
 
@@ -8,11 +9,17 @@ namespace Teleport.Repository
 {
     public class ShoppingCartRepo : IShoppingCartRepo
     {
-        private const string DirectoryPath = @"./Database/ShoppingCart/";
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private const string DirectoryPath = @"/Database/ShoppingCart/";
+
+        public ShoppingCartRepo(IWebHostEnvironment webHostEnvironment)
+        {
+            _webHostEnvironment = webHostEnvironment;
+        }
 
         public ShoppingCart GetByCustomerId(int customerId)
         {
-            var filePath = $"{DirectoryPath}{customerId}_shoppingCart.json";
+            var filePath = $"{_webHostEnvironment.ContentRootPath}{DirectoryPath}{customerId}_shoppingCart.json";
             if (!File.Exists(filePath))
             {
                 return new ShoppingCart()
@@ -31,7 +38,7 @@ namespace Teleport.Repository
         {
             var json = JsonConvert.SerializeObject(shoppingCart, Formatting.Indented);
 
-            await File.WriteAllTextAsync($"{DirectoryPath}{shoppingCart.CustomerId}_shoppingCart.json", json);
+            await File.WriteAllTextAsync($"{_webHostEnvironment.ContentRootPath}{DirectoryPath}{shoppingCart.CustomerId}_shoppingCart.json", json);
         }
     }
 }

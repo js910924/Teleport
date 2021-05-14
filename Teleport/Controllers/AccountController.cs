@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Teleport.Models;
@@ -12,7 +13,13 @@ namespace Teleport.Controllers
 {
     public class AccountController : Controller
     {
-        private const string DirectoryPath = "./Database/Customer/";
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private const string DirPath = "/Database/Customer/";
+
+        public AccountController(IWebHostEnvironment webHostEnvironment)
+        {
+            _webHostEnvironment = webHostEnvironment;
+        }
 
         [HttpGet]
         public ViewResult SignUp()
@@ -24,7 +31,7 @@ namespace Teleport.Controllers
         [HttpPost]
         public async Task<ViewResult> SignUp(AccountViewModel model)
         {
-            if (System.IO.File.Exists($@"{DirectoryPath}{model.Account}.json"))
+            if (System.IO.File.Exists($"{_webHostEnvironment.ContentRootPath}{DirPath}{model.Account}.json"))
             {
                 model.ErrorMessage = "account already exist";
                 return View("SignUp", model);
@@ -33,7 +40,7 @@ namespace Teleport.Controllers
             var customer = model.ToCustomer();
             customer.CustomerId = GetTotalCustomerAmount() + 1;
             customer.CreatedOn = DateTime.Now;
-            await System.IO.File.WriteAllTextAsync($@"{DirectoryPath}{model.Account}.json", JsonConvert.SerializeObject(customer));
+            await System.IO.File.WriteAllTextAsync($"{_webHostEnvironment.ContentRootPath}{DirPath}{model.Account}.json", JsonConvert.SerializeObject(customer));
 
             return View("SignIn", model);
         }
@@ -48,13 +55,13 @@ namespace Teleport.Controllers
         [HttpPost]
         public async Task<IActionResult> SignIn(AccountViewModel model)
         {
-            if (!System.IO.File.Exists($@"{DirectoryPath}{model.Account}.json"))
+            if (!System.IO.File.Exists($"{_webHostEnvironment.ContentRootPath}{DirPath}{model.Account}.json"))
             {
                 model.ErrorMessage = "account not exist";
                 return View("SignIn", model);
             }
 
-            var json = await System.IO.File.ReadAllTextAsync($@"{DirectoryPath}{model.Account}.json");
+            var json = await System.IO.File.ReadAllTextAsync($"{_webHostEnvironment.ContentRootPath}{DirPath}{model.Account}.json");
             var customer = JsonConvert.DeserializeObject<Customer>(json);
             if (customer.Account != model.Account || customer.Password != model.Password)
             {
@@ -84,11 +91,11 @@ namespace Teleport.Controllers
             return RedirectToAction("SignIn");
         }
 
-        private static int GetTotalCustomerAmount()
+        private int GetTotalCustomerAmount()
         {
-            var dir = new System.IO.DirectoryInfo(DirectoryPath);
-            var count = dir.GetFiles().Length;
-            return count;
+            var dir = new System.IO.DirectoryInfo($"{_webHostEnvironment.ContentRootPath}{DirPath}");
+
+            return dir.GetFiles().Length;
         }
     }
 }

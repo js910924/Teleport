@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json;
 using Teleport.Models;
 
@@ -8,13 +9,19 @@ namespace Teleport.Repository
 {
     public class StockTransactionRepo : IStockTransactionRepo
     {
-        private const string DirectoryPath = @"./Database/Transaction/";
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private const string DirPath = @"/Database/Transaction/";
+
+        public StockTransactionRepo(IWebHostEnvironment webHostEnvironment)
+        {
+            _webHostEnvironment = webHostEnvironment;
+        }
 
         public async Task UpsertStockTransactions(IEnumerable<StockTransaction> stockTransactions, int customerId)
         {
             var json = JsonConvert.SerializeObject(stockTransactions);
 
-            await System.IO.File.WriteAllTextAsync($"{DirectoryPath}{customerId}_transactions.json", json);
+            await System.IO.File.WriteAllTextAsync($"{_webHostEnvironment.ContentRootPath}{DirPath}{customerId}_transactions.json", json);
         }
 
         public async Task InsertStockTransaction(StockTransaction stockTransaction)
@@ -38,12 +45,12 @@ namespace Teleport.Repository
 
         public void DeleteAllTransactionsBy(int customerId)
         {
-            System.IO.File.Delete($"{DirectoryPath}{customerId}_transactions.json");
+            System.IO.File.Delete($"{_webHostEnvironment.ContentRootPath}{DirPath}{customerId}_transactions.json");
         }
 
         public async Task<IEnumerable<StockTransaction>> GetStockTransactionsBy(int customerId)
         {
-            var filePath = $"{DirectoryPath}{customerId}_transactions.json";
+            var filePath = $"{_webHostEnvironment.ContentRootPath}{DirPath}{customerId}_transactions.json";
 
             if (System.IO.File.Exists(filePath))
             {
