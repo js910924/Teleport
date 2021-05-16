@@ -56,6 +56,7 @@ namespace Teleport
             services.AddTransient<IStockMarketChecker, StockMarketChecker>();
             services.AddTransient<IStockTransactionService, StockTransactionService>();
             services.AddTransient<IShoppingCartService, ShoppingCartService>();
+            services.AddTransient<ICommodityService, CommodityService>();
         }
 
         private static void ConfigureRepo(IServiceCollection services)
@@ -64,6 +65,7 @@ namespace Teleport
             services.AddTransient<IStockInfoRepo, StockInfoRepo>();
             services.AddTransient<IPttArticleRepo, PttArticleRepo>();
             services.AddTransient<IShoppingCartRepo, ShoppingCartRepo>();
+            services.AddTransient<ICommodityRepo, CommodityRepo>();
         }
 
         private static void ConfigureSchedulers(IServiceCollection services)

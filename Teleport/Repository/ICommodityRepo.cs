@@ -6,5 +6,6 @@ namespace Teleport.Repository
     public interface ICommodityRepo
     {
         IEnumerable<Commodity> GetAll();
+        void Add(Commodity commodity);
     }
 }

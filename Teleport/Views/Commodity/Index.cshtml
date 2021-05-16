@@ -8,24 +8,30 @@
 <div class="table-responsive">
     <table class="table table-bordered table-hover">
         <thead>
-        <tr>
-            <th>#</th>
-            <th>Id</th>
-            <th>Title</th>
-            <th>Price</th>
-        </tr>
+            <tr>
+                <th>#</th>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Price</th>
+            </tr>
         </thead>
         <tbody>
-        @for (var i = 0; i < Model.Rows.Count; i++)
-        {
-            <tr>
-                <td>@(i + 1)</td>
-                <td>@Model.Rows[i].Id</td>
-                <td>@Model.Rows[i].Title</td>
-                <td>@Model.Rows[i].Price</td>
-            </tr>
-        }
+            @for (var i = 0; i < Model.Rows.Count; i++)
+            {
+                <tr>
+                    <td>@(i + 1)</td>
+                    <td>@Model.Rows[i].Id</td>
+                    <td>@Model.Rows[i].Title</td>
+                    <td>@Model.Rows[i].Price</td>
+                </tr>
+            }
         </tbody>
     </table>
 </div>
 
+AddCommodity
+<form asp-action="Add" asp-controller="Commodity" method="post">
+    <input type="text" name="Title" placeholder="Title">
+    <input type="number" name="Price" placeholder="Price">
+    <input type="submit">
+</form>

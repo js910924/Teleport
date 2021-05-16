@@ -17,5 +17,10 @@ namespace Teleport.Services
         {
             return _commodityRepo.GetAll();
         }
+
+        public void AddCommodity(Commodity commodity)
+        {
+            _commodityRepo.Add(commodity);
+        }
     }
 }

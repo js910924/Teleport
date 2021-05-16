@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Hosting;
@@ -19,14 +20,38 @@ namespace Teleport.Repository
 
         public IEnumerable<Commodity> GetAll()
         {
-            var dirPath = $"{_webHostEnvironment.ContentRootPath}{DirPath}";
-            if (!Directory.Exists(dirPath))
+            EnsureDirectoryExist();
+
+            var fileNames = Directory.EnumerateFiles(GetDirPath());
+            return fileNames.Select(name => JsonConvert.DeserializeObject<Commodity>(File.ReadAllText(name)));
+        }
+
+        public void Add(Commodity commodity)
+        {
+            EnsureDirectoryExist();
+
+            var filePath = $"{GetDirPath()}{commodity.Title}.json";
+            if (!File.Exists(filePath))
             {
-                Directory.CreateDirectory(dirPath);
+                commodity.Id = GetAll().Count() + 1;
+                commodity.CreatedOn = DateTime.Now;
             }
 
-            var fileNames = Directory.EnumerateFiles(dirPath);
-            return fileNames.Select(name => JsonConvert.DeserializeObject<Commodity>(name));
+            commodity.ModifiedOn = DateTime.Now;
+            File.WriteAllText(filePath, JsonConvert.SerializeObject(commodity));
+        }
+
+        private void EnsureDirectoryExist()
+        {
+            if (!Directory.Exists(GetDirPath()))
+            {
+                Directory.CreateDirectory(GetDirPath());
+            }
+        }
+
+        private string GetDirPath()
+        {
+            return $"{_webHostEnvironment.ContentRootPath}{DirPath}";
         }
     }
 }

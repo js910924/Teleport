@@ -30,5 +30,18 @@ namespace Teleport.Controllers
 
             return View("Index", viewModel);
         }
+
+        public IActionResult Add(CommodityOperationRequest request)
+        {
+            var commodity = new Commodity
+            {
+                Id = request.Id,
+                Title = request.Title,
+                Price = request.Price
+            };
+            _commodityService.AddCommodity(commodity);
+
+            return RedirectToAction("Index");
+        }
     }
 }
