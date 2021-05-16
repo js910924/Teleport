@@ -21,7 +21,9 @@ namespace Teleport.Repository
 
         public async Task<StockInfo> GetStockInfo(string stockSymbol)
         {
-            if (File.Exists($"{_webHostEnvironment.ContentRootPath}{DirPath}{stockSymbol}.json"))
+            EnsureDirectoryExist();
+
+            if (File.Exists($"{GetDirPath()}{stockSymbol}.json"))
             {
                 var json = await File.ReadAllTextAsync($"{_webHostEnvironment.ContentRootPath}{DirPath}{stockSymbol}.json");
 
@@ -33,6 +35,8 @@ namespace Teleport.Repository
 
         public async Task UpsertStockInfo(StockInfo stockInfo)
         {
+            EnsureDirectoryExist();
+
             stockInfo.CreatedOn = DateTime.Now;
 
             var info = await GetStockInfo(stockInfo.Symbol);
@@ -43,12 +47,14 @@ namespace Teleport.Repository
 
             stockInfo.ModifiedOn = DateTime.Now;
 
-            await File.WriteAllTextAsync($"{_webHostEnvironment.ContentRootPath}{DirPath}{stockInfo.Symbol}.json", JsonConvert.SerializeObject(stockInfo));
+            await File.WriteAllTextAsync($"{GetDirPath()}{stockInfo.Symbol}.json", JsonConvert.SerializeObject(stockInfo));
         }
 
         public async Task<IEnumerable<StockInfo>> GetAllStockInfo()
         {
-            var filePaths = Directory.EnumerateFiles($"{_webHostEnvironment.ContentRootPath}{DirPath}");
+            EnsureDirectoryExist();
+
+            var filePaths = Directory.EnumerateFiles(GetDirPath());
             var tasks = filePaths.Select(filePath => File.ReadAllTextAsync(filePath));
 
             await Task.WhenAll(tasks);
@@ -61,6 +67,19 @@ namespace Teleport.Repository
             }
 
             return stockInfos;
+        }
+
+        private void EnsureDirectoryExist()
+        {
+            if (!Directory.Exists(GetDirPath()))
+            {
+                Directory.CreateDirectory(GetDirPath());
+            }
+        }
+
+        private string GetDirPath()
+        {
+            return $"{_webHostEnvironment.ContentRootPath}{DirPath}";
         }
     }
 }

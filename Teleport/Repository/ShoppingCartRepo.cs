@@ -10,7 +10,7 @@ namespace Teleport.Repository
     public class ShoppingCartRepo : IShoppingCartRepo
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
-        private const string DirectoryPath = "/Database/ShoppingCart/";
+        private const string DirPath = "/Database/ShoppingCart/";
 
         public ShoppingCartRepo(IWebHostEnvironment webHostEnvironment)
         {
@@ -19,10 +19,12 @@ namespace Teleport.Repository
 
         public ShoppingCart GetByCustomerId(int customerId)
         {
-            var filePath = $"{_webHostEnvironment.ContentRootPath}{DirectoryPath}{customerId}_shoppingCart.json";
+            EnsureDirectoryExist();
+
+            var filePath = $"{GetDirPath()}{customerId}_shoppingCart.json";
             if (!File.Exists(filePath))
             {
-                return new ShoppingCart()
+                return new ShoppingCart
                 {
                     CustomerId = customerId,
                     ShoppingCartCommodities = Enumerable.Empty<ShoppingCartCommodity>().ToList()
@@ -36,9 +38,24 @@ namespace Teleport.Repository
 
         public async Task Upsert(ShoppingCart shoppingCart)
         {
+            EnsureDirectoryExist();
+
             var json = JsonConvert.SerializeObject(shoppingCart, Formatting.Indented);
 
-            await File.WriteAllTextAsync($"{_webHostEnvironment.ContentRootPath}{DirectoryPath}{shoppingCart.CustomerId}_shoppingCart.json", json);
+            await File.WriteAllTextAsync($"{GetDirPath()}{shoppingCart.CustomerId}_shoppingCart.json", json);
+        }
+
+        private void EnsureDirectoryExist()
+        {
+            if (!Directory.Exists(GetDirPath()))
+            {
+                Directory.CreateDirectory(GetDirPath());
+            }
+        }
+
+        private string GetDirPath()
+        {
+            return $"{_webHostEnvironment.ContentRootPath}{DirPath}";
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
@@ -19,13 +20,17 @@ namespace Teleport.Repository
 
         public async Task UpsertStockTransactions(IEnumerable<StockTransaction> stockTransactions, int customerId)
         {
+            EnsureDirectoryExist();
+
             var json = JsonConvert.SerializeObject(stockTransactions);
 
-            await System.IO.File.WriteAllTextAsync($"{_webHostEnvironment.ContentRootPath}{DirPath}{customerId}_transactions.json", json);
+            await File.WriteAllTextAsync($"{GetDirPath()}{customerId}_transactions.json", json);
         }
 
         public async Task InsertStockTransaction(StockTransaction stockTransaction)
         {
+            EnsureDirectoryExist();
+
             var stockTransactions = (await GetStockTransactionsBy(stockTransaction.CustomerId)).ToList();
 
             stockTransaction.Id = !stockTransactions.Any() ? 1 : stockTransactions.Max(trx => trx.Id) + 1;
@@ -36,6 +41,8 @@ namespace Teleport.Repository
 
         public async Task DeleteTransaction(int transactionId, int customerId)
         {
+            EnsureDirectoryExist();
+
             var stockTransactions = await GetStockTransactionsBy(customerId);
 
             var transactions = stockTransactions.Where(trx => trx.Id != transactionId);
@@ -45,20 +52,37 @@ namespace Teleport.Repository
 
         public void DeleteAllTransactionsBy(int customerId)
         {
-            System.IO.File.Delete($"{_webHostEnvironment.ContentRootPath}{DirPath}{customerId}_transactions.json");
+            EnsureDirectoryExist();
+
+            File.Delete($"{GetDirPath()}{customerId}_transactions.json");
         }
 
         public async Task<IEnumerable<StockTransaction>> GetStockTransactionsBy(int customerId)
         {
-            var filePath = $"{_webHostEnvironment.ContentRootPath}{DirPath}{customerId}_transactions.json";
+            EnsureDirectoryExist();
 
-            if (System.IO.File.Exists(filePath))
+            var filePath = $"{GetDirPath()}{customerId}_transactions.json";
+
+            if (File.Exists(filePath))
             {
-                var json = await System.IO.File.ReadAllTextAsync(filePath);
+                var json = await File.ReadAllTextAsync(filePath);
                 return JsonConvert.DeserializeObject<IEnumerable<StockTransaction>>(json);
             }
 
             return Enumerable.Empty<StockTransaction>();
+        }
+
+        private void EnsureDirectoryExist()
+        {
+            if (!Directory.Exists(GetDirPath()))
+            {
+                Directory.CreateDirectory(GetDirPath());
+            }
+        }
+
+        private string GetDirPath()
+        {
+            return $"{_webHostEnvironment.ContentRootPath}{DirPath}";
         }
     }
 }
