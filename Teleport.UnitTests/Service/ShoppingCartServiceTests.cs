@@ -62,38 +62,22 @@ namespace Teleport.UnitTests.Service
         }
 
         [Test]
-        public async Task should_increase_commodity_quantity_when_commodity_exist_in_shopping_cart()
+        public async Task should_update_commodity_quantity_when_commodity_exist_in_shopping_cart()
         {
             GivenShoppingCartCommodities(CreateShoppingCartCommodity(_bookCommodity, 2));
             GivenShoppingCart();
 
-            var shoppingCart = await _shoppingCartService.AddCommodity(CustomerId, CreateShoppingCartCommodity(_bookCommodity, 5));
+            var shoppingCart = await _shoppingCartService.UpdateCommodity(CustomerId, CreateShoppingCartCommodity(_bookCommodity, 5));
 
             shoppingCart.Should().BeEquivalentTo(new ShoppingCart
             {
                 CustomerId = CustomerId,
-                ShoppingCartCommodities = new List<ShoppingCartCommodity> { CreateShoppingCartCommodity(_bookCommodity, 7) }
+                ShoppingCartCommodities = new List<ShoppingCartCommodity> { CreateShoppingCartCommodity(_bookCommodity, 5) }
             });
         }
 
         [Test]
-        public async Task should_remove_commodity_with_specific_quantities()
-        {
-            GivenShoppingCartCommodities(CreateShoppingCartCommodity(_bookCommodity, 5));
-            GivenShoppingCart();
-
-            var shoppingCart = await _shoppingCartService.RemoveCommodity(CustomerId, CreateShoppingCartCommodity(_bookCommodity, 2));
-
-            shoppingCart.ShoppingCartCommodities
-                .Should()
-                .BeEquivalentTo(new List<ShoppingCartCommodity>
-                {
-                    CreateShoppingCartCommodity(_bookCommodity, 3)
-                } );
-        }
-
-        [Test]
-        public async Task should_remove_commodity_in_shopping_cart_when_quantity_is_0()
+        public async Task should_remove_commodity_in_shopping_cart()
         {
             GivenShoppingCartCommodities(CreateShoppingCartCommodity(_bookCommodity, 5));
             GivenShoppingCart();

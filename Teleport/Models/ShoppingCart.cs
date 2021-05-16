@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace Teleport.Models
@@ -9,32 +8,29 @@ namespace Teleport.Models
         public int CustomerId { get; set; }
         public List<ShoppingCartCommodity> ShoppingCartCommodities { get; set; }
 
-        public void AddCommodity(ShoppingCartCommodity cartCommodity)
+        public void AddCommodity(ShoppingCartCommodity shoppingCartCommodity)
         {
-            var shoppingCartCommodity = ShoppingCartCommodities.FirstOrDefault(commodity => commodity.Commodity.Id == cartCommodity.Commodity.Id);
-            if (shoppingCartCommodity == null)
+            var commodityInCart = ShoppingCartCommodities.FirstOrDefault(commodity => commodity.Commodity.Id == shoppingCartCommodity.Commodity.Id);
+            if (commodityInCart == null)
             {
-                ShoppingCartCommodities.Add(cartCommodity);
-            }
-            else
-            {
-                shoppingCartCommodity.Quantity += cartCommodity.Quantity;
+                ShoppingCartCommodities.Add(shoppingCartCommodity);
             }
         }
 
         public void RemoveCommodity(ShoppingCartCommodity shoppingCartCommodity)
         {
-            var cartCommodity = ShoppingCartCommodities.First(commodity => commodity.Commodity.Id == shoppingCartCommodity.Commodity.Id);
+            var commodityInCart = ShoppingCartCommodities.FirstOrDefault(commodity => commodity.Commodity.Id == shoppingCartCommodity.Commodity.Id);
+            if (commodityInCart != null)
+            {
+                ShoppingCartCommodities.Remove(commodityInCart);
+            }
+        }
 
-            var quantity = Math.Max(cartCommodity.Quantity - shoppingCartCommodity.Quantity, 0);
-            if (quantity == 0)
-            {
-                ShoppingCartCommodities.Remove(cartCommodity);
-            }
-            else
-            {
-                cartCommodity.Quantity = quantity;
-            }
+        public void UpdateCommodity(ShoppingCartCommodity shoppingCartCommodity)
+        {
+            var commodityInCart = ShoppingCartCommodities.First(commodity => commodity.Commodity.Id == shoppingCartCommodity.Commodity.Id);
+
+            commodityInCart.Quantity = shoppingCartCommodity.Quantity;
         }
     }
 }

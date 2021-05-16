@@ -60,5 +60,20 @@ namespace Teleport.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        public async Task<ActionResult> UpdateCommodity(ShoppingCartCommodityOperationRequest shoppingCartCommodityOperationRequest)
+        {
+            await _shoppingCartService.UpdateCommodity(CustomerId, new ShoppingCartCommodity
+            {
+                Commodity = new Commodity
+                {
+                    Id = shoppingCartCommodityOperationRequest.CommodityId
+                },
+                Quantity = shoppingCartCommodityOperationRequest.Quantity
+            });
+
+            return RedirectToAction("Index");
+        }
     }
 }

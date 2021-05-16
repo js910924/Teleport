@@ -29,13 +29,21 @@
     </table>
 </div>
 
+AddCommodity
 <form asp-action="AddCommodity" asp-controller="ShoppingCart" method="post">
     <input type="number" name="commodityId" placeholder="CommodityId">
-    <input type="text" name="commodityTitle" placeholder="CommodityTitle">
+    <input type="number" name="quantity" placeholder="Quantity">
     <input type="submit">
 </form>
 
+RemoveCommodity
 <form asp-action="RemoveCommodity" asp-controller="ShoppingCart" method="post">
+    <input type="number" name="commodityId" placeholder="CommodityId">
+    <input type="submit">
+</form>
+
+UpdateCommodity
+<form asp-action="UpdateCommodity" asp-controller="ShoppingCart" method="post">
     <input type="number" name="commodityId" placeholder="CommodityId">
     <input type="number" name="quantity" placeholder="Quantity">
     <input type="submit">

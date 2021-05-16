@@ -40,5 +40,16 @@ namespace Teleport.Services
 
             return shoppingCart;
         }
+
+        public async Task<ShoppingCart> UpdateCommodity(int customerId, ShoppingCartCommodity shoppingCartCommodity)
+        {
+            var shoppingCart = GetCart(customerId);
+
+            shoppingCart.UpdateCommodity(shoppingCartCommodity);
+
+            await _shoppingCartRepo.Upsert(shoppingCart);
+
+            return shoppingCart;
+        }
     }
 }
