@@ -22,10 +22,11 @@ namespace Teleport.Controllers
 
             return View("Index", new ShoppingCartRowsViewModel
             {
-                Rows = shoppingCart.Commodities.Select(commodity => new ShoppingCartCommodityRow()
+                Rows = shoppingCart.ShoppingCartCommodities.Select(commodity => new ShoppingCartCommodityRow()
                 {
-                    CommodityId = commodity.Id,
-                    CommodityTitle = commodity.Title
+                    CommodityId = commodity.Commodity.Id,
+                    CommodityTitle = commodity.Commodity.Title,
+                    Quantity = commodity.Quantity
                 }).ToList()
             });
         }
@@ -33,10 +34,13 @@ namespace Teleport.Controllers
         [HttpPost]
         public async Task<ActionResult> AddCommodity(ShoppingCartCommodityOperationRequest shoppingCartCommodityOperationRequest)
         {
-            await _shoppingCartService.AddCommodity(CustomerId, new Commodity
+            await _shoppingCartService.AddCommodity(CustomerId, new ShoppingCartCommodity
             {
-                Id = shoppingCartCommodityOperationRequest.CommodityId,
-                Title = shoppingCartCommodityOperationRequest.CommodityTitle
+                Commodity = new Commodity
+                {
+                    Id = shoppingCartCommodityOperationRequest.CommodityId
+                },
+                Quantity = shoppingCartCommodityOperationRequest.Quantity
             });
 
             return RedirectToAction("Index");

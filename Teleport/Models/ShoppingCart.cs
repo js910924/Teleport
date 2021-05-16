@@ -7,12 +7,19 @@ namespace Teleport.Models
     public class ShoppingCart
     {
         public int CustomerId { get; set; }
-        public List<Commodity> Commodities { get; set; }
         public List<ShoppingCartCommodity> ShoppingCartCommodities { get; set; }
 
-        public void AddCommodity(Commodity commodity)
+        public void AddCommodity(ShoppingCartCommodity cartCommodity)
         {
-            Commodities.Add(commodity);
+            var shoppingCartCommodity = ShoppingCartCommodities.FirstOrDefault(commodity => commodity.Commodity.Id == cartCommodity.Commodity.Id);
+            if (shoppingCartCommodity == null)
+            {
+                ShoppingCartCommodities.Add(cartCommodity);
+            }
+            else
+            {
+                shoppingCartCommodity.Quantity += cartCommodity.Quantity;
+            }
         }
 
         public void RemoveCommodity(ShoppingCartCommodity shoppingCartCommodity)

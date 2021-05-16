@@ -19,7 +19,7 @@ namespace Teleport.Services
             return _shoppingCartRepo.GetByCustomerId(customerId);
         }
 
-        public async Task<ShoppingCart> AddCommodity(int customerId, Commodity commodity)
+        public async Task<ShoppingCart> AddCommodity(int customerId, ShoppingCartCommodity commodity)
         {
             var shoppingCart = GetCart(customerId);
 

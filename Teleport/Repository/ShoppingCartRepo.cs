@@ -25,7 +25,7 @@ namespace Teleport.Repository
                 return new ShoppingCart()
                 {
                     CustomerId = customerId,
-                    Commodities = Enumerable.Empty<Commodity>().ToList()
+                    ShoppingCartCommodities = Enumerable.Empty<ShoppingCartCommodity>().ToList()
                 };
             }
    

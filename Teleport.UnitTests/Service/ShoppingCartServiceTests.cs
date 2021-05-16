@@ -28,7 +28,6 @@ namespace Teleport.UnitTests.Service
             _shoppingCart = new ShoppingCart
             {
                 CustomerId = CustomerId,
-                Commodities = new List<Commodity>(),
                 ShoppingCartCommodities = new List<ShoppingCartCommodity>()
             };
             _shoppingCartService = new ShoppingCartService(_shoppingCartRepo);
@@ -44,7 +43,6 @@ namespace Teleport.UnitTests.Service
             shoppingCart.Should().BeEquivalentTo(new ShoppingCart
             {
                 CustomerId = CustomerId,
-                Commodities = new List<Commodity>(),
                 ShoppingCartCommodities = new List<ShoppingCartCommodity>()
             });
         }
@@ -54,13 +52,27 @@ namespace Teleport.UnitTests.Service
         {
             GivenShoppingCart();
 
-            var shoppingCart = await _shoppingCartService.AddCommodity(CustomerId, CreateCommodity(91, "book"));
+            var shoppingCart = await _shoppingCartService.AddCommodity(CustomerId, CreateShoppingCartCommodity(_bookCommodity, 5));
 
             shoppingCart.Should().BeEquivalentTo(new ShoppingCart
             {
                 CustomerId = CustomerId,
-                Commodities = new List<Commodity> {CreateCommodity(91, "book")},
-                ShoppingCartCommodities = new List<ShoppingCartCommodity>()
+                ShoppingCartCommodities = new List<ShoppingCartCommodity> { CreateShoppingCartCommodity(_bookCommodity, 5) }
+            });
+        }
+
+        [Test]
+        public async Task should_increase_commodity_quantity_when_commodity_exist_in_shopping_cart()
+        {
+            GivenShoppingCartCommodities(CreateShoppingCartCommodity(_bookCommodity, 2));
+            GivenShoppingCart();
+
+            var shoppingCart = await _shoppingCartService.AddCommodity(CustomerId, CreateShoppingCartCommodity(_bookCommodity, 5));
+
+            shoppingCart.Should().BeEquivalentTo(new ShoppingCart
+            {
+                CustomerId = CustomerId,
+                ShoppingCartCommodities = new List<ShoppingCartCommodity> { CreateShoppingCartCommodity(_bookCommodity, 7) }
             });
         }
 
