@@ -41,6 +41,18 @@ namespace Teleport.Repository
             File.WriteAllText(filePath, JsonConvert.SerializeObject(commodity));
         }
 
+        public void Remove(Commodity commodity)
+        {
+            EnsureDirectoryExist();
+
+            var commodities = GetAll();
+            var first = commodities.FirstOrDefault(commodityInDb => commodityInDb.Id == commodity.Id);
+            if (first != null)
+            {
+                File.Delete($"{GetDirPath()}{first.Title}.json");
+            }
+        }
+
         private void EnsureDirectoryExist()
         {
             if (!Directory.Exists(GetDirPath()))

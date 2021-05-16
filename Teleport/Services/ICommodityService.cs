@@ -7,5 +7,6 @@ namespace Teleport.Services
     {
         IEnumerable<Commodity> GetAllCommodities();
         void AddCommodity(Commodity commodity);
+        void RemoveCommodity(Commodity commodity);
     }
 }

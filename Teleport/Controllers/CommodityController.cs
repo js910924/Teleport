@@ -25,7 +25,7 @@ namespace Teleport.Controllers
                     Id = commodity.Id,
                     Title = commodity.Title,
                     Price = commodity.Price
-                }).ToList()
+                }).OrderBy(commodity => commodity.Id).ToList()
             };
 
             return View("Index", viewModel);
@@ -40,6 +40,18 @@ namespace Teleport.Controllers
                 Price = request.Price
             };
             _commodityService.AddCommodity(commodity);
+
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Remove(CommodityOperationRequest request)
+        {
+            var commodity = new Commodity
+            {
+                Id = request.Id
+            };
+
+            _commodityService.RemoveCommodity(commodity);
 
             return RedirectToAction("Index");
         }

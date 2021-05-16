@@ -22,5 +22,10 @@ namespace Teleport.Services
         {
             _commodityRepo.Add(commodity);
         }
+
+        public void RemoveCommodity(Commodity commodity)
+        {
+            _commodityRepo.Remove(commodity);
+        }
     }
 }

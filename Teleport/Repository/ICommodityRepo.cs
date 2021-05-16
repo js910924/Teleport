@@ -7,5 +7,6 @@ namespace Teleport.Repository
     {
         IEnumerable<Commodity> GetAll();
         void Add(Commodity commodity);
+        void Remove(Commodity commodity);
     }
 }
