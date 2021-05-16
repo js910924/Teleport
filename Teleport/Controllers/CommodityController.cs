@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Teleport.Models;
 using Teleport.Services;
 
 namespace Teleport.Controllers
@@ -30,17 +30,5 @@ namespace Teleport.Controllers
 
             return View("Index", viewModel);
         }
-    }
-
-    public class CommodityViewModel
-    {
-        public List<CommodityRow> Rows { get; set; }
-    }
-
-    public class CommodityRow
-    {
-        public int Id { get; set; }
-        public string Title { get; set; }
-        public decimal Price { get; set; }
     }
 }
