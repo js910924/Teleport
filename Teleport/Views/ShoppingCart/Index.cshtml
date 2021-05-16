@@ -12,6 +12,7 @@
                 <th>#</th>
                 <th>CommodityId</th>
                 <th>CommodityTitle</th>
+                <th>Quantity</th>
             </tr>
         </thead>
         <tbody>
@@ -21,6 +22,7 @@
                 <td>@(i + 1)</td>
                 <td>@Model.Rows[i].CommodityId</td>
                 <td>@Model.Rows[i].CommodityTitle</td>
+                <td>@Model.Rows[i].Quantity</td>
             </tr>
             }
         </tbody>
@@ -30,5 +32,11 @@
 <form asp-action="AddCommodity" asp-controller="ShoppingCart" method="post">
     <input type="number" name="commodityId" placeholder="CommodityId">
     <input type="text" name="commodityTitle" placeholder="CommodityTitle">
+    <input type="submit">
+</form>
+
+<form asp-action="RemoveCommodity" asp-controller="ShoppingCart" method="post">
+    <input type="number" name="commodityId" placeholder="CommodityId">
+    <input type="number" name="quantity" placeholder="Quantity">
     <input type="submit">
 </form>

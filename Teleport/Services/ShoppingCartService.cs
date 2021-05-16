@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Teleport.Controllers;
 using Teleport.Models;
 using Teleport.Repository;
 
@@ -23,6 +24,17 @@ namespace Teleport.Services
             var shoppingCart = GetCart(customerId);
 
             shoppingCart.AddCommodity(commodity);
+
+            await _shoppingCartRepo.Upsert(shoppingCart);
+
+            return shoppingCart;
+        }
+
+        public async Task<ShoppingCart> RemoveCommodity(int customerId, ShoppingCartCommodity shoppingCartCommodity)
+        {
+            var shoppingCart = GetCart(customerId);
+
+            shoppingCart.RemoveCommodity(shoppingCartCommodity);
 
             await _shoppingCartRepo.Upsert(shoppingCart);
 

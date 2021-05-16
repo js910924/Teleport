@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Teleport.Controllers;
 using Teleport.Models;
 
 namespace Teleport.Services
@@ -7,5 +8,6 @@ namespace Teleport.Services
     {
         ShoppingCart GetCart(int customerId);
         Task<ShoppingCart> AddCommodity(int customerId, Commodity commodity);
+        Task<ShoppingCart> RemoveCommodity(int customerId, ShoppingCartCommodity shoppingCartCommodity);
     }
 }

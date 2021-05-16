@@ -31,12 +31,27 @@ namespace Teleport.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddCommodity(AddCommodityRequest addCommodityRequest)
+        public async Task<ActionResult> AddCommodity(ShoppingCartCommodityOperationRequest shoppingCartCommodityOperationRequest)
         {
             await _shoppingCartService.AddCommodity(CustomerId, new Commodity
             {
-                Id = addCommodityRequest.CommodityId,
-                Title = addCommodityRequest.CommodityTitle
+                Id = shoppingCartCommodityOperationRequest.CommodityId,
+                Title = shoppingCartCommodityOperationRequest.CommodityTitle
+            });
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> RemoveCommodity(ShoppingCartCommodityOperationRequest shoppingCartCommodityOperationRequest)
+        {
+            await _shoppingCartService.RemoveCommodity(CustomerId, new ShoppingCartCommodity
+            {
+                Commodity = new Commodity
+                {
+                    Id = shoppingCartCommodityOperationRequest.CommodityId
+                },
+                Quantity = shoppingCartCommodityOperationRequest.Quantity
             });
 
             return RedirectToAction("Index");
