@@ -1,0 +1,31 @@
+﻿@model Teleport.Controllers.CommodityViewModel
+
+@{
+    ViewBag.Title = "Commodity Back Office";
+    Layout = "_Layout";
+}
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        @for (var i = 0; i < Model.Rows.Count; i++)
+        {
+            <tr>
+                <td>@(i + 1)</td>
+                <td>@Model.Rows[i].Id</td>
+                <td>@Model.Rows[i].Title</td>
+                <td>@Model.Rows[i].Price</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
