@@ -18,9 +18,9 @@ namespace Teleport.Services
             return _commodityRepo.GetAll();
         }
 
-        public void AddCommodity(Commodity commodity)
+        public void UpsertCommodity(Commodity commodity)
         {
-            _commodityRepo.Add(commodity);
+            _commodityRepo.Upsert(commodity);
         }
 
         public void RemoveCommodity(Commodity commodity)

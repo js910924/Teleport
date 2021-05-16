@@ -31,7 +31,7 @@ namespace Teleport.Controllers
             return View("Index", viewModel);
         }
 
-        public IActionResult Add(CommodityOperationRequest request)
+        public IActionResult Upsert(CommodityOperationRequest request)
         {
             var commodity = new Commodity
             {
@@ -39,7 +39,7 @@ namespace Teleport.Controllers
                 Title = request.Title,
                 Price = request.Price
             };
-            _commodityService.AddCommodity(commodity);
+            _commodityService.UpsertCommodity(commodity);
 
             return RedirectToAction("Index");
         }

@@ -6,7 +6,7 @@ namespace Teleport.Services
     public interface ICommodityService
     {
         IEnumerable<Commodity> GetAllCommodities();
-        void AddCommodity(Commodity commodity);
+        void UpsertCommodity(Commodity commodity);
         void RemoveCommodity(Commodity commodity);
     }
 }

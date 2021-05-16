@@ -26,7 +26,7 @@ namespace Teleport.Repository
             return fileNames.Select(name => JsonConvert.DeserializeObject<Commodity>(File.ReadAllText(name)));
         }
 
-        public void Add(Commodity commodity)
+        public void Upsert(Commodity commodity)
         {
             EnsureDirectoryExist();
 
